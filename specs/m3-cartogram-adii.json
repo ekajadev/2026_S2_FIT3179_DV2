@@ -1,0 +1,469 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Choropleth of Australian states and territories coloured by the 2025 Australian Digital Inclusion Index score. The ACT scores highest at 79.5 and Tasmania lowest at 69.4; the national score is 73.6.",
+  "usermeta": {
+    "source": "Australian Digital Inclusion Index 2025 report (Thomas et al., ARC Centre of Excellence for Automated Decision-Making and Society, RMIT, Swinburne and Telstra), pp. 11–12; ABS ASGS Edition 3 STE 2021 boundaries",
+    "url": "https://www.digitalinclusionindex.org.au/",
+    "method": "Published state and territory index scores, 0–100 scale. Access sub-scores shown where the report publishes them. Boundaries simplified to 4% in mapshaper.",
+    "projection": "Conic equal-area with standard parallels 18°S and 36°S.",
+    "zoom": {
+      "min": 1,
+      "max": 2.5,
+      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
+      "projectedBounds": [
+        -44.355,
+        94.135,
+        49.856,
+        184.144
+      ],
+      "reason": "8 states: little extra detail beyond 2.5×"
+    }
+  },
+  "width": "container",
+  "height": 360,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": "Going digital is easier in some states than others",
+    "subtitle": "Australian Digital Inclusion Index, 2025 (national score 73.6)"
+  },
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0,
+      0
+    ],
+    "scale": {
+      "expr": "150 * min(width / 94.211, height / 90.009) * mapZoom"
+    },
+    "translate": {
+      "expr": "[width / 2 - mapCentre[0] * min(width / 94.211, height / 90.009) * mapZoom, height / 2 - mapCentre[1] * min(width / 94.211, height / 90.009) * mapZoom]"
+    },
+    "clipExtent": {
+      "expr": "[[0, 0], [width, height]]"
+    }
+  },
+  "data": {
+    "url": "data/geo/ste_2021.topo.json",
+    "format": {
+      "type": "topojson",
+      "feature": "STE_2021_AUST_GDA2020"
+    }
+  },
+  "transform": [
+    {
+      "lookup": "properties.STE_NAME21",
+      "from": {
+        "data": {
+          "url": "data/adii_2025_by_state.csv"
+        },
+        "key": "name",
+        "fields": [
+          "state",
+          "adii_2025",
+          "access_2025",
+          "national_adii"
+        ]
+      }
+    },
+    {
+      "calculate": "datum.adii_2025 - datum.national_adii",
+      "as": "gap"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#f8fafc",
+        "strokeWidth": 1,
+        "clip": true
+      },
+      "encoding": {
+        "color": {
+          "field": "adii_2025",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              68,
+              80
+            ],
+            "range": [
+              "#ece6fb",
+              "#d6cbf6",
+              "#bca9ee",
+              "#9f86e3",
+              "#8366d6",
+              "#6a48c4",
+              "#512fa8"
+            ]
+          },
+          "legend": {
+            "orient": "bottom-left",
+            "direction": "horizontal",
+            "gradientLength": 160,
+            "title": "Index score"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "properties.STE_NAME21",
+            "title": "State or territory"
+          },
+          {
+            "field": "adii_2025",
+            "title": "Digital inclusion score"
+          },
+          {
+            "field": "gap",
+            "title": "Versus national",
+            "format": "+.1f"
+          },
+          {
+            "field": "access_2025",
+            "title": "Access sub-score"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.state !== 'ACT'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "color": "#141a24",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "clip": true
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lbl"
+        }
+      },
+      "data": {
+        "values": [
+          {
+            "state": "WA",
+            "lon": 122,
+            "lat": -26,
+            "lbl": "WA 73.9"
+          },
+          {
+            "state": "NT",
+            "lon": 133.5,
+            "lat": -19.5,
+            "lbl": "NT 72.5"
+          },
+          {
+            "state": "SA",
+            "lon": 135.5,
+            "lat": -30,
+            "lbl": "SA 71.3"
+          },
+          {
+            "state": "QLD",
+            "lon": 144.5,
+            "lat": -22.5,
+            "lbl": "QLD 72.9"
+          },
+          {
+            "state": "NSW",
+            "lon": 146.5,
+            "lat": -32.3,
+            "lbl": "NSW 74.0"
+          },
+          {
+            "state": "VIC",
+            "lon": 142.6,
+            "lat": -37.2,
+            "lbl": "VIC 74.1"
+          },
+          {
+            "state": "TAS",
+            "lon": 146.6,
+            "lat": -42.1,
+            "lbl": "TAS 69.4"
+          },
+          {
+            "state": "ACTL",
+            "lon": 151.9,
+            "lat": -36.6,
+            "lbl": "ACT 79.5"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 112,
+            "lat": -40,
+            "t": "ACT (79.5) sits 10 points above Tasmania (69.4)"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 10,
+        "color": "#3b4656",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "clip": true
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "params": [
+    {
+      "name": "mapZoom",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 2.5,
+        "step": 0.1,
+        "name": "Zoom: "
+      }
+    },
+    {
+      "name": "mapCentre",
+      "value": [
+        2.751,
+        139.139
+      ],
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            2.751,
+            139.139
+          ],
+          [
+            41.371,
+            160.285
+          ],
+          [
+            26.924,
+            168.853
+          ],
+          [
+            48.03,
+            144.205
+          ],
+          [
+            -35.436,
+            154.346
+          ],
+          [
+            14.117,
+            160.321
+          ],
+          [
+            30.265,
+            182.346
+          ],
+          [
+            -3.019,
+            100.876
+          ]
+        ],
+        "labels": [
+          "Whole country",
+          "Sydney",
+          "Melbourne",
+          "Brisbane",
+          "Perth",
+          "Adelaide",
+          "Hobart",
+          "Darwin"
+        ],
+        "name": "Map centre: "
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

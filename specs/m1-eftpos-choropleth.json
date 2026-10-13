@@ -1,0 +1,593 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Map of Australian states with two variables: the fill shows bank-reported EFTPOS terminals per 1,000 residents in June 2025 (ACT 49, Queensland 23, South Australia 13), and a circle on each state shows the share of bank ATMs removed between 2017 and 2025 (ACT lost 73%, Northern Territory 48%). The card infrastructure stayed; the cash infrastructure went.",
+  "usermeta": {
+    "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 1 (EFTPOS and ATM channels) and Table 2 (population by SA2); ABS ASGS Edition 3 STE 2021 boundaries",
+    "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
+    "method": "EFTPOS terminals are reported by APRA at state level only. Rate = terminals ÷ state population × 1,000. ATM change = (ATMs 2025 − ATMs 2017) ÷ ATMs 2017. Circle area is proportional to the percentage of ATMs lost.",
+    "projection": "Conic equal-area with standard parallels 18°S and 36°S.",
+    "zoom": {
+      "min": 1,
+      "max": 2.5,
+      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
+      "projectedBounds": [
+        -44.355,
+        94.135,
+        49.856,
+        184.144
+      ],
+      "reason": "8 states: little extra detail beyond 2.5×"
+    }
+  },
+  "width": "container",
+  "height": 420,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": [
+      "The card terminals mostly stayed.",
+      "The cash machines went."
+    ],
+    "subtitle": "Fill: card terminals per 1,000 people. Circles: ATMs removed since 2017."
+  },
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0,
+      0
+    ],
+    "scale": {
+      "expr": "150 * min(width / 94.211, height / 90.009) * mapZoom"
+    },
+    "translate": {
+      "expr": "[width / 2 - mapCentre[0] * min(width / 94.211, height / 90.009) * mapZoom, height / 2 - mapCentre[1] * min(width / 94.211, height / 90.009) * mapZoom]"
+    },
+    "clipExtent": {
+      "expr": "[[0, 0], [width, height]]"
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/geo/ste_2021.topo.json",
+        "format": {
+          "type": "topojson",
+          "feature": "STE_2021_AUST_GDA2020"
+        }
+      },
+      "transform": [
+        {
+          "calculate": "['NSW','VIC','QLD','SA','WA','TAS','NT','ACT'][indexof(['New South Wales','Victoria','Queensland','South Australia','Western Australia','Tasmania','Northern Territory','Australian Capital Territory'], datum.properties.STE_NAME21)]",
+          "as": "state"
+        },
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/apra_eftpos_by_state_2017_2025.csv"
+            },
+            "key": "state",
+            "fields": [
+              "eftpos_2017",
+              "eftpos_2025",
+              "eftpos_per_1k_2025",
+              "eftpos_change_pct"
+            ]
+          }
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#f8fafc",
+        "strokeWidth": 1,
+        "clip": true
+      },
+      "encoding": {
+        "color": {
+          "field": "eftpos_per_1k_2025",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              10,
+              50
+            ],
+            "range": [
+              "#ece6fb",
+              "#d6cbf6",
+              "#bca9ee",
+              "#9f86e3",
+              "#8366d6",
+              "#6a48c4",
+              "#512fa8"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "direction": "horizontal",
+            "gradientLength": 150,
+            "title": "Card terminals per 1,000"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "properties.STE_NAME21",
+            "title": "State or territory"
+          },
+          {
+            "field": "eftpos_per_1k_2025",
+            "title": "Terminals per 1,000 (2025)"
+          },
+          {
+            "field": "eftpos_2025",
+            "title": "Terminals 2025",
+            "format": ","
+          },
+          {
+            "field": "eftpos_change_pct",
+            "title": "Terminal change 2017–25 (%)",
+            "format": "+.0f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "state": "WA",
+            "lon": 122,
+            "lat": -26,
+            "al": "center",
+            "ldx": 0,
+            "ldy": 24
+          },
+          {
+            "state": "NT",
+            "lon": 133.5,
+            "lat": -19.5,
+            "al": "center",
+            "ldx": 0,
+            "ldy": 24
+          },
+          {
+            "state": "SA",
+            "lon": 135.5,
+            "lat": -30,
+            "al": "center",
+            "ldx": 0,
+            "ldy": 24
+          },
+          {
+            "state": "QLD",
+            "lon": 144.5,
+            "lat": -22.5,
+            "al": "center",
+            "ldx": 0,
+            "ldy": 24
+          },
+          {
+            "state": "NSW",
+            "lon": 146,
+            "lat": -31.2,
+            "al": "center",
+            "ldx": 0,
+            "ldy": 24
+          },
+          {
+            "state": "VIC",
+            "lon": 141.8,
+            "lat": -37,
+            "al": "right",
+            "ldx": -20,
+            "ldy": 0
+          },
+          {
+            "state": "TAS",
+            "lon": 146.6,
+            "lat": -42.1,
+            "al": "left",
+            "ldx": 18,
+            "ldy": 0
+          },
+          {
+            "state": "ACT",
+            "lon": 152.5,
+            "lat": -36.3,
+            "al": "left",
+            "ldx": 20,
+            "ldy": 0
+          }
+        ]
+      },
+      "transform": [
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/apra_state_access_2025.csv"
+            },
+            "key": "state",
+            "fields": [
+              "atms_2017",
+              "atms",
+              "atm_change_pct"
+            ]
+          }
+        },
+        {
+          "calculate": "-datum.atm_change_pct",
+          "as": "atm_loss_pct"
+        },
+        {
+          "calculate": "datum.state + '  −' + format(datum.atm_loss_pct, '.0f') + '% ATMs'",
+          "as": "lbl"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "circle",
+            "color": "#d64545",
+            "opacity": 0.85,
+            "stroke": "#f8fafc",
+            "strokeWidth": 1,
+            "clip": true
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "size": {
+              "field": "atm_loss_pct",
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  0,
+                  80
+                ],
+                "range": [
+                  0,
+                  650
+                ]
+              },
+              "legend": {
+                "orient": "top",
+                "title": "ATMs removed since 2017",
+                "values": [
+                  25,
+                  50,
+                  75
+                ],
+                "labelExpr": "datum.value + '%'",
+                "symbolFillColor": "#d64545",
+                "symbolStrokeColor": "#f8fafc",
+                "direction": "horizontal",
+                "columns": 3
+              }
+            },
+            "tooltip": [
+              {
+                "field": "state",
+                "title": "State"
+              },
+              {
+                "field": "atms_2017",
+                "title": "Bank ATMs 2017",
+                "format": ","
+              },
+              {
+                "field": "atms",
+                "title": "Bank ATMs 2025",
+                "format": ","
+              },
+              {
+                "field": "atm_change_pct",
+                "title": "Change (%)",
+                "format": "+.0f"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "dy": {
+              "expr": "datum.ldy"
+            },
+            "fontSize": 10,
+            "color": "#141a24",
+            "font": "Space Grotesk, system-ui, sans-serif",
+            "align": {
+              "expr": "datum.al"
+            },
+            "dx": {
+              "expr": "datum.ldx"
+            },
+            "baseline": "middle",
+            "clip": true
+          },
+          "encoding": {
+            "longitude": {
+              "field": "lon",
+              "type": "quantitative"
+            },
+            "latitude": {
+              "field": "lat",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "lbl"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 112.5,
+            "lat": -38.5,
+            "t": [
+              "Terminals fell 10–19% in every state;",
+              "bank ATMs fell 48–73%"
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 10.5,
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "color": "#3b4656"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "params": [
+    {
+      "name": "mapZoom",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 2.5,
+        "step": 0.1,
+        "name": "Zoom: "
+      }
+    },
+    {
+      "name": "mapCentre",
+      "value": [
+        2.751,
+        139.139
+      ],
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            2.751,
+            139.139
+          ],
+          [
+            41.371,
+            160.285
+          ],
+          [
+            26.924,
+            168.853
+          ],
+          [
+            48.03,
+            144.205
+          ],
+          [
+            -35.436,
+            154.346
+          ],
+          [
+            14.117,
+            160.321
+          ],
+          [
+            30.265,
+            182.346
+          ],
+          [
+            -3.019,
+            100.876
+          ]
+        ],
+        "labels": [
+          "Whole country",
+          "Sydney",
+          "Melbourne",
+          "Brisbane",
+          "Perth",
+          "Adelaide",
+          "Hobart",
+          "Darwin"
+        ],
+        "name": "Map centre: "
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

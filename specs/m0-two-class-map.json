@@ -1,0 +1,586 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Interactive two-class map of Australia's greater capital cities versus the rest of each state, coloured by the cash share of consumer payments in the survey year chosen with a slider (2007 to 2022). In 2007 both classes were near 69%; the gap was widest in 2016 (34% in capital cities, 44% regional) and had closed to 12% versus 15% by 2022.",
+  "usermeta": {
+    "source": "RBA Consumer Payments Survey Explorer export, 2007–2022, Region dimension, payments by number; ABS ASGS Edition 3 GCCSA 2021 boundaries",
+    "url": "https://www.rba.gov.au/payments-and-infrastructure/consumer-payments-survey/",
+    "method": "The survey publishes only two regions: capital city and regional. Each greater-capital-city polygon takes the capital value and each rest-of-state polygon the regional value for the selected survey year. A single gold ramp (0–70%) is shared across all years so the slider shows the fall as well as the gap. Boundaries simplified to 1.5% in mapshaper.",
+    "projection": "Conic equal-area (Albers) with standard parallels 18°S and 36°S, so area is preserved across the continent.",
+    "zoom": {
+      "min": 1,
+      "max": 6,
+      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
+      "projectedBounds": [
+        -44.356,
+        94.135,
+        49.856,
+        184.131
+      ],
+      "reason": "capital-city areas are small; 6× makes each one readable"
+    }
+  },
+  "width": "container",
+  "height": 360,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": "Regional Australia kept using cash a little longer",
+    "subtitle": [
+      "Cash share of payments, capital cities vs the rest.",
+      "Opens on 2016, when the gap was widest; use the slider."
+    ]
+  },
+  "params": [
+    {
+      "name": "wave",
+      "value": 2016,
+      "bind": {
+        "input": "range",
+        "min": 2007,
+        "max": 2022,
+        "step": 3,
+        "name": "Survey year "
+      }
+    },
+    {
+      "name": "mapZoom",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 6,
+        "step": 0.1,
+        "name": "Zoom: "
+      }
+    },
+    {
+      "name": "mapCentre",
+      "value": [
+        2.75,
+        139.133
+      ],
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            2.75,
+            139.133
+          ],
+          [
+            41.371,
+            160.285
+          ],
+          [
+            26.924,
+            168.853
+          ],
+          [
+            48.03,
+            144.205
+          ],
+          [
+            -35.436,
+            154.346
+          ],
+          [
+            14.117,
+            160.321
+          ],
+          [
+            30.265,
+            182.346
+          ],
+          [
+            -3.019,
+            100.876
+          ]
+        ],
+        "labels": [
+          "Whole country",
+          "Sydney",
+          "Melbourne",
+          "Brisbane",
+          "Perth",
+          "Adelaide",
+          "Hobart",
+          "Darwin"
+        ],
+        "name": "Map centre: "
+      }
+    }
+  ],
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -18,
+      -36
+    ],
+    "rotate": [
+      -132,
+      0,
+      0
+    ],
+    "scale": {
+      "expr": "150 * min(width / 94.212, height / 89.996) * mapZoom"
+    },
+    "translate": {
+      "expr": "[width / 2 - mapCentre[0] * min(width / 94.212, height / 89.996) * mapZoom, height / 2 - mapCentre[1] * min(width / 94.212, height / 89.996) * mapZoom]"
+    },
+    "clipExtent": {
+      "expr": "[[0, 0], [width, height]]"
+    }
+  },
+  "data": {
+    "url": "data/geo/gccsa_2021.topo.json",
+    "format": {
+      "type": "topojson",
+      "feature": "GCCSA_2021_AUST_GDA2020"
+    }
+  },
+  "transform": [
+    {
+      "calculate": "test(/^(Greater|Australian Capital)/, datum.properties.GCC_NAME21) ? 'Capital city' : 'Regional'",
+      "as": "region"
+    },
+    {
+      "lookup": "region",
+      "from": {
+        "data": {
+          "values": [
+            {
+              "region": "Capital city",
+              "c2007": 68.6,
+              "c2010": 61.0,
+              "c2013": 45.7,
+              "c2016": 34.4,
+              "c2019": 25.1,
+              "c2022": 12.4
+            },
+            {
+              "region": "Regional",
+              "c2007": 69.8,
+              "c2010": 62.3,
+              "c2013": 50.8,
+              "c2016": 43.6,
+              "c2019": 31.7,
+              "c2022": 15.2
+            }
+          ]
+        },
+        "key": "region",
+        "fields": [
+          "c2007",
+          "c2010",
+          "c2013",
+          "c2016",
+          "c2019",
+          "c2022"
+        ]
+      }
+    },
+    {
+      "calculate": "datum['c' + wave]",
+      "as": "share"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#f8fafc",
+        "strokeWidth": 0.8,
+        "clip": true
+      },
+      "encoding": {
+        "color": {
+          "field": "share",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              70
+            ],
+            "range": [
+              "#fde8d2",
+              "#f9cfa3",
+              "#f3b26f",
+              "#ea9340",
+              "#d9741b",
+              "#b85c0f",
+              "#8f4508"
+            ]
+          },
+          "legend": {
+            "orient": "bottom-left",
+            "direction": "horizontal",
+            "gradientLength": 150,
+            "title": "Cash share of payments",
+            "labelExpr": "datum.value + '%'",
+            "values": [
+              0,
+              35,
+              70
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "properties.GCC_NAME21",
+            "title": "Area"
+          },
+          {
+            "field": "region",
+            "title": "Survey region"
+          },
+          {
+            "field": "share",
+            "title": "Cash share in selected year (%)"
+          },
+          {
+            "field": "c2007",
+            "title": "2007 (%)"
+          },
+          {
+            "field": "c2016",
+            "title": "2016 (%)"
+          },
+          {
+            "field": "c2022",
+            "title": "2022 (%)"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "region": "Regional",
+            "lon": 133,
+            "lat": -24
+          },
+          {
+            "region": "Capital city",
+            "lon": 113,
+            "lat": -14
+          }
+        ]
+      },
+      "transform": [
+        {
+          "lookup": "region",
+          "from": {
+            "data": {
+              "values": [
+                {
+                  "region": "Capital city",
+                  "c2007": 68.6,
+                  "c2010": 61.0,
+                  "c2013": 45.7,
+                  "c2016": 34.4,
+                  "c2019": 25.1,
+                  "c2022": 12.4
+                },
+                {
+                  "region": "Regional",
+                  "c2007": 69.8,
+                  "c2010": 62.3,
+                  "c2013": 50.8,
+                  "c2016": 43.6,
+                  "c2019": 31.7,
+                  "c2022": 15.2
+                }
+              ]
+            },
+            "key": "region",
+            "fields": [
+              "c2007",
+              "c2010",
+              "c2013",
+              "c2016",
+              "c2019",
+              "c2022"
+            ]
+          }
+        },
+        {
+          "calculate": "(datum.region === 'Regional' ? 'Regional Australia ' : 'Capital cities ') + wave + ': ' + format(datum['c' + wave], '.0f') + '% cash'",
+          "as": "lbl"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 12,
+        "color": "#141a24",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "align": "left",
+        "clip": true
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lbl"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 151.2,
+            "lat": -33.9,
+            "label": "Sydney"
+          },
+          {
+            "lon": 144.96,
+            "lat": -37.8,
+            "label": "Melbourne"
+          },
+          {
+            "lon": 153.0,
+            "lat": -27.5,
+            "label": "Brisbane"
+          },
+          {
+            "lon": 115.9,
+            "lat": -31.95,
+            "label": "Perth"
+          },
+          {
+            "lon": 138.6,
+            "lat": -34.9,
+            "label": "Adelaide"
+          },
+          {
+            "lon": 147.3,
+            "lat": -42.9,
+            "label": "Hobart"
+          },
+          {
+            "lon": 130.8,
+            "lat": -12.5,
+            "label": "Darwin"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "dx": 6,
+        "align": "left",
+        "fontSize": 10,
+        "color": "#3b4656",
+        "clip": true
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "({2007:1.2,2010:1.3,2013:5.1,2016:9.2,2019:6.6,2022:2.8})[wave]",
+          "as": "gap"
+        },
+        {
+          "calculate": "'Gap in ' + wave + ': ' + format(datum.gap, '.1f') + ' points' + (wave === 2016 ? ' (the widest)' : '')",
+          "as": "t"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 11,
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "color": "#8f4508",
+        "fontWeight": 600,
+        "x": {
+          "expr": "width"
+        },
+        "y": 4
+      },
+      "encoding": {
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

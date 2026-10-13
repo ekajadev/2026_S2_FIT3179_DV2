@@ -1,0 +1,417 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Streamgraph of the share of consumer payments by number across seven survey waves, 2007 to 2025. Cash shrinks from 69% to 15%, debit cards grow from 15% to 49%, credit cards move between 9% and 26%, and other methods stay small.",
+  "usermeta": {
+    "source": "RBA Consumer Payments Survey Explorer export (2007–2022) and Kim & Reschke, RBA Bulletin May 2026, Graph 1 (2025)",
+    "url": "https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html",
+    "method": "Payments by number. 'Other' is 100 minus cash, debit and credit so that every wave sums to 100; for 2007–2022 it equals BPAY, internet/phone banking, cheque, gift cards and other. Lines connect survey waves, not annual observations.",
+    "labels": "End labels are placed at the midpoint of each band computed from the published shares (bands always sum to 100)."
+  },
+  "width": "container",
+  "height": 300,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": "Debit cards took the ground that cash gave up",
+    "subtitle": "Share of payments by number, seven Reserve Bank surveys 2007–2025"
+  },
+  "data": {
+    "url": "data/cps_payment_mix_2007_2025.csv"
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "area",
+        "interpolate": "monotone",
+        "line": {
+          "stroke": "#f8fafc",
+          "strokeWidth": 1
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              2007,
+              2025
+            ]
+          },
+          "axis": {
+            "title": "Survey year",
+            "values": [
+              2007,
+              2010,
+              2013,
+              2016,
+              2019,
+              2022,
+              2025
+            ],
+            "format": "d"
+          }
+        },
+        "y": {
+          "field": "share",
+          "type": "quantitative",
+          "stack": "center",
+          "axis": {
+            "title": "Cumulative share of payments",
+            "labelExpr": "datum.value + '%'",
+            "values": [
+              0,
+              25,
+              50,
+              75,
+              100
+            ]
+          }
+        },
+        "color": {
+          "field": "method",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "Cash",
+              "Debit card",
+              "Credit card",
+              "Other (BPAY, bank transfer, cheque, other)"
+            ],
+            "range": [
+              "#d96a10",
+              "#1f6fd6",
+              "#1a9e5c",
+              "#7d8898"
+            ]
+          },
+          "legend": {
+            "labelExpr": "datum.label === 'Other (BPAY, bank transfer, cheque, other)' ? 'Other' : datum.label",
+            "title": "Payment method"
+          }
+        },
+        "order": {
+          "field": "method",
+          "sort": "descending"
+        },
+        "opacity": {
+          "condition": {
+            "param": "hoverMethod",
+            "value": 1
+          },
+          "value": 0.35
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "type": "ordinal",
+            "title": "Survey"
+          },
+          {
+            "field": "method",
+            "title": "Method"
+          },
+          {
+            "field": "share",
+            "type": "quantitative",
+            "title": "Share of payments (%)",
+            "format": ".1f"
+          }
+        ]
+      },
+      "params": [
+        {
+          "name": "hoverMethod",
+          "select": {
+            "type": "point",
+            "fields": [
+              "method"
+            ],
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 2017.5
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          3,
+          3
+        ],
+        "color": "#3b4656"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 2017.5,
+            "t": "Between 2016 and 2019 debit overtook cash"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -6,
+        "y": 40,
+        "fontSize": 10,
+        "color": "#141a24",
+        "font": "Space Grotesk, system-ui, sans-serif"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 2025,
+            "y": 92.3,
+            "t": "Cash 15%"
+          },
+          {
+            "x": 2025,
+            "y": 73,
+            "t": "Credit 23%"
+          },
+          {
+            "x": 2025,
+            "y": 36.6,
+            "t": "Debit 49%"
+          },
+          {
+            "x": 2025,
+            "y": 6,
+            "t": "Other 12%"
+          },
+          {
+            "x": 2007,
+            "y": 65.5,
+            "t": "69%"
+          },
+          {
+            "x": 2007,
+            "y": 25.3,
+            "t": "12%"
+          },
+          {
+            "x": 2007,
+            "y": 12.1,
+            "t": "15%"
+          },
+          {
+            "x": 2007,
+            "y": 2.4,
+            "t": "5%"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 10,
+        "color": "#141a24",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "fontWeight": 500,
+        "baseline": "middle",
+        "align": {
+          "expr": "datum.x === 2025 ? 'right' : 'left'"
+        },
+        "dx": {
+          "expr": "datum.x === 2025 ? -6 : 6"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "subtitle": null,
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

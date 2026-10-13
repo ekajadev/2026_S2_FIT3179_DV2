@@ -1,0 +1,14 @@
+source,target,share
+Cash,In person,13.3
+Debit card,Insert or swipe,3.03
+Debit card,Tap with card,27.17
+Debit card,Tap with phone,13.65
+Debit card,Online,6.31
+Debit card,Other,0.36
+Credit card,Insert or swipe,0.9
+Credit card,Tap with card,14.33
+Credit card,Tap with phone,6.45
+Credit card,Online,3.66
+Credit card,Other,0.3
+Bank transfer & BPAY,Online,5.56
+Other,Other,4.97

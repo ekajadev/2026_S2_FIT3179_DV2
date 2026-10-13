@@ -1,0 +1,512 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Six stacked bands, one per payment size, each showing the share of payments made in cash from 2007 to 2022 on its own 0–100% scale. Payments under $10 fell from 95% cash to 23%; $11–$20 from 77% to 15%; $21–$50 from 55% to 13%; $51–$100 from 36% to 8%; $101–$500 from 30% to 6%; over $500 from 19% to 3%.",
+  "usermeta": {
+    "source": "RBA Consumer Payments Survey Explorer export, Payment size dimension, payments by number, 2007–2022",
+    "url": "https://www.rba.gov.au/payments-and-infrastructure/consumer-payments-survey/",
+    "method": "Each band is one payment-size group with its own 0–100% vertical scale, so bands never overlap. Values at the right are the 2007 and 2022 cash shares. The 2025 wave is not published by payment size."
+  },
+  "width": "container",
+  "height": 440,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": [
+      "Even the smallest purchase stopped",
+      "being a cash purchase"
+    ],
+    "subtitle": [
+      "Share of payments made in cash, by payment size, 2007–2022.",
+      "Each band runs from 0% (bottom) to 100% (top)."
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "b": 0
+          },
+          {
+            "b": 1
+          },
+          {
+            "b": 2
+          },
+          {
+            "b": 3
+          },
+          {
+            "b": 4
+          },
+          {
+            "b": 5
+          }
+        ]
+      },
+      "transform": [
+        {
+          "calculate": "datum.b + 0.82/2",
+          "as": "half"
+        },
+        {
+          "calculate": "datum.b + 0.82",
+          "as": "full"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "color": "#cfd6e0",
+            "strokeDash": [
+              2,
+              3
+            ]
+          },
+          "encoding": {
+            "x": {
+              "datum": 2007,
+              "type": "quantitative",
+              "scale": {
+                "domain": [
+                  2007,
+                  2027
+                ],
+                "nice": false
+              },
+              "axis": {
+                "title": "Survey year",
+                "values": [
+                  2007,
+                  2010,
+                  2013,
+                  2016,
+                  2019,
+                  2022
+                ],
+                "format": "d",
+                "grid": false
+              }
+            },
+            "x2": {
+              "datum": 2022
+            },
+            "y": {
+              "field": "half",
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "rule",
+            "color": "#9aa6b8"
+          },
+          "encoding": {
+            "x": {
+              "datum": 2007,
+              "type": "quantitative"
+            },
+            "x2": {
+              "datum": 2022
+            },
+            "y": {
+              "field": "b",
+              "type": "quantitative"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "url": "data/cps_cash_share_by_size_2007_2022.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "cash_share": "number",
+            "order": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "calculate": "6 - datum.order",
+          "as": "base"
+        },
+        {
+          "calculate": "datum.base + datum.cash_share / 100 * 0.82",
+          "as": "top"
+        }
+      ],
+      "mark": {
+        "type": "area",
+        "interpolate": "monotone",
+        "opacity": 0.9,
+        "line": {
+          "color": "#b85c0f",
+          "strokeWidth": 1.5
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              2007,
+              2027
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Survey year",
+            "values": [
+              2007,
+              2010,
+              2013,
+              2016,
+              2019,
+              2022
+            ],
+            "format": "d",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "base",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              6.5
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Payment size",
+            "values": [
+              0.41,
+              1.41,
+              2.41,
+              3.41,
+              4.41,
+              5.41
+            ],
+            "labelExpr": "['$501+','$101–$500','$51–$100','$21–$50','$11–$20','$1–$10'][floor(datum.value)]",
+            "grid": false,
+            "labelFontSize": 11
+          }
+        },
+        "y2": {
+          "field": "top"
+        },
+        "detail": {
+          "field": "size_band"
+        },
+        "color": {
+          "datum": "Cash share (band height, dashed line = 50%)",
+          "scale": {
+            "range": [
+              "#f3b26f"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "title": null,
+            "labelLimit": 400
+          }
+        },
+        "tooltip": [
+          {
+            "field": "size_band",
+            "title": "Payment size"
+          },
+          {
+            "field": "year",
+            "title": "Survey",
+            "format": "d"
+          },
+          {
+            "field": "cash_share",
+            "title": "Paid in cash (%)"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/cps_cash_share_by_size_2007_2022.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "cash_share": "number",
+            "order": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.year === 2007 || datum.year === 2022"
+        },
+        {
+          "pivot": "year",
+          "value": "cash_share",
+          "groupby": [
+            "size_band",
+            "order"
+          ]
+        },
+        {
+          "calculate": "6 - datum.order + 0.82/2",
+          "as": "mid"
+        },
+        {
+          "calculate": "format(datum['2007'], '.0f') + '% → ' + format(datum['2022'], '.0f') + '%'",
+          "as": "lbl"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 11,
+        "color": "#141a24",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "dx": 8
+      },
+      "encoding": {
+        "x": {
+          "datum": 2022,
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "mid",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lbl"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "2007 → 2022"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "fontSize": 10,
+        "color": "#5f6b7d",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "dx": 8
+      },
+      "encoding": {
+        "x": {
+          "datum": 2022,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 6.3,
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Under $10: below half paid in cash by 2019 (45%) ↓"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "fontSize": 10,
+        "color": "#3b4656",
+        "font": "Space Grotesk, system-ui, sans-serif"
+      },
+      "encoding": {
+        "x": {
+          "datum": 2021.5,
+          "type": "quantitative"
+        },
+        "y": {
+          "datum": 6.3,
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

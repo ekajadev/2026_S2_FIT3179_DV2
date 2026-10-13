@@ -1,0 +1,642 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Voronoi map of Victoria's 748 bank branch locations in June 2025. Each cell is the area closer to that branch than to any other, so cell size shows how far people must travel to their nearest branch: a few hundred metres in Melbourne, tens of kilometres in the Mallee and Gippsland. Cells are clipped to Victoria's outline and coloured by the ABS remoteness class of the branch.",
+  "usermeta": {
+    "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2025, Table 1 (Branch channel, Victoria, latitude and longitude); ABS ASGS Edition 3 STE 2021 boundary for Victoria",
+    "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
+    "method": "Branch points projected with a conic equal-area projection fitted to Victoria, then partitioned with Vega's voronoi transform. Cells outside Victoria are hidden by a mask polygon (a rectangle with the state cut out, made in mapshaper), so catchments stop at the border and coastline. Straight-line distance, not road distance. Built in Vega because Vega-Lite has no Voronoi transform.",
+    "interaction": "A three-step zoom (whole state, Melbourne and Geelong, Metropolitan Melbourne) refits the projection; the Voronoi cells are recomputed for each view so city catchments become visible."
+  },
+  "autosize": "none",
+  "height": 380,
+  "padding": {
+    "top": 8,
+    "bottom": 76,
+    "left": 0,
+    "right": 0
+  },
+  "signals": [
+    {
+      "name": "width",
+      "init": "containerSize()[0] || 600",
+      "on": [
+        {
+          "events": {
+            "source": "window",
+            "type": "resize"
+          },
+          "update": "containerSize()[0] || 600"
+        }
+      ]
+    },
+    {
+      "name": "height",
+      "update": "440"
+    },
+    {
+      "name": "zoom",
+      "value": "Whole state",
+      "bind": {
+        "input": "radio",
+        "options": [
+          "Whole state",
+          "Melbourne and Geelong",
+          "Metropolitan Melbourne"
+        ],
+        "name": "Zoom to",
+        "element": "#c13-zoom"
+      }
+    },
+    {
+      "name": "zoomLevel",
+      "update": "indexof(['Whole state', 'Melbourne and Geelong', 'Metropolitan Melbourne'], zoom)"
+    },
+    {
+      "name": "hover",
+      "value": null,
+      "on": [
+        {
+          "events": "@cells:pointerover",
+          "update": "datum"
+        },
+        {
+          "events": "pointerout",
+          "update": "null"
+        }
+      ]
+    }
+  ],
+  "data": [
+    {
+      "name": "vic",
+      "url": "data/geo/ste_2021.topo.json",
+      "format": {
+        "type": "topojson",
+        "feature": "STE_2021_AUST_GDA2020"
+      },
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.properties.STE_NAME21 === 'Victoria'"
+        }
+      ]
+    },
+    {
+      "name": "branches",
+      "url": "data/apra_vic_branches_2025.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "lat": "number",
+          "lon": "number",
+          "branches": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "geopoint",
+          "projection": "proj",
+          "fields": [
+            "lon",
+            "lat"
+          ]
+        },
+        {
+          "type": "filter",
+          "expr": "isValid(datum.x) && isValid(datum.y)"
+        },
+        {
+          "type": "voronoi",
+          "x": "x",
+          "y": "y",
+          "extent": {
+            "signal": "[[0, 0], [max(10, width), max(10, height)]]"
+          },
+          "as": "cell"
+        }
+      ]
+    },
+    {
+      "name": "mask",
+      "url": "data/geo/vic_mask_2021.topo.json",
+      "format": {
+        "type": "topojson",
+        "feature": "frame"
+      }
+    },
+    {
+      "name": "places",
+      "values": [
+        {
+          "lon": 144.963,
+          "lat": -37.814,
+          "t": "Melbourne",
+          "level": 0
+        },
+        {
+          "lon": 144.28,
+          "lat": -36.76,
+          "t": "Bendigo",
+          "level": 0
+        },
+        {
+          "lon": 142.16,
+          "lat": -34.6,
+          "t": "Mildura",
+          "level": 0
+        },
+        {
+          "lon": 144.36,
+          "lat": -38.15,
+          "t": "Geelong",
+          "level": 0
+        },
+        {
+          "lon": 147.07,
+          "lat": -38.11,
+          "t": "Sale",
+          "level": 0
+        },
+        {
+          "lon": 142.2,
+          "lat": -36.71,
+          "t": "Horsham",
+          "level": 0
+        },
+        {
+          "lon": 143.85,
+          "lat": -37.56,
+          "t": "Ballarat",
+          "level": 1
+        },
+        {
+          "lon": 145.215,
+          "lat": -37.987,
+          "t": "Dandenong",
+          "level": 1
+        },
+        {
+          "lon": 145.125,
+          "lat": -38.144,
+          "t": "Frankston",
+          "level": 1
+        },
+        {
+          "lon": 144.66,
+          "lat": -37.9,
+          "t": "Werribee",
+          "level": 2
+        },
+        {
+          "lon": 144.94,
+          "lat": -37.6,
+          "t": "Craigieburn",
+          "level": 2
+        },
+        {
+          "lon": 145.12,
+          "lat": -37.82,
+          "t": "Box Hill",
+          "level": 2
+        },
+        {
+          "lon": 145.35,
+          "lat": -37.755,
+          "t": "Lilydale",
+          "level": 2
+        },
+        {
+          "lon": 149.7577,
+          "lat": -37.5575,
+          "t": "Mallacoota: next branch 116 km away",
+          "level": 0,
+          "note": 1
+        },
+        {
+          "lon": 142.3165,
+          "lat": -35.0701,
+          "t": "Ouyen: next branch 68 km away",
+          "level": 0,
+          "note": 1
+        }
+      ],
+      "transform": [
+        {
+          "type": "geopoint",
+          "projection": "proj",
+          "fields": [
+            "lon",
+            "lat"
+          ]
+        }
+      ]
+    }
+  ],
+  "projections": [
+    {
+      "name": "proj",
+      "type": "conicEqualArea",
+      "parallels": [
+        -36,
+        -38
+      ],
+      "rotate": [
+        -145,
+        0,
+        0
+      ],
+      "fit": {
+        "signal": "zoomLevel === 0 ? data('vic') : zoomLevel === 1 ? {type: 'Feature', geometry: {type: 'MultiPoint', coordinates: [[143.85, -38.55], [145.75, -37.35]]}} : {type: 'Feature', geometry: {type: 'MultiPoint', coordinates: [[144.55, -38.2], [145.45, -37.55]]}}"
+      },
+      "size": {
+        "signal": "[width, height]"
+      }
+    }
+  ],
+  "scales": [
+    {
+      "name": "remote",
+      "type": "ordinal",
+      "domain": [
+        "Major Cities of Australia",
+        "Inner Regional Australia",
+        "Outer Regional Australia",
+        "Remote Australia"
+      ],
+      "range": [
+        "#fde8d2",
+        "#f3b26f",
+        "#d9741b",
+        "#8f4508"
+      ]
+    }
+  ],
+  "legends": [
+    {
+      "fill": "remote",
+      "orient": "bottom",
+      "direction": "horizontal",
+      "title": "Branch is in",
+      "labelColor": "#3b4656",
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "symbolType": "square",
+      "symbolStrokeColor": "#f8fafc",
+      "labelLimit": 220,
+      "encode": {
+        "labels": {
+          "update": {
+            "text": {
+              "signal": "replace(replace(datum.label, ' of Australia', ''), ' Australia', '')"
+            }
+          }
+        }
+      },
+      "columns": 2,
+      "titleColor": "#5f6b7d",
+      "titleFont": "IBM Plex Mono, monospace",
+      "titleFontSize": 11,
+      "columnPadding": 18,
+      "rowPadding": 6
+    }
+  ],
+  "marks": [
+    {
+      "type": "group",
+      "clip": true,
+      "encode": {
+        "update": {
+          "x": {
+            "value": 0
+          },
+          "y": {
+            "value": 0
+          },
+          "width": {
+            "signal": "width"
+          },
+          "height": {
+            "signal": "height"
+          }
+        }
+      },
+      "marks": [
+        {
+          "name": "cells",
+          "type": "path",
+          "from": {
+            "data": "branches"
+          },
+          "encode": {
+            "update": {
+              "path": {
+                "field": "cell"
+              },
+              "fill": {
+                "scale": "remote",
+                "field": "remoteness"
+              },
+              "fillOpacity": {
+                "signal": "hover && hover !== datum ? 0.45 : 0.85"
+              },
+              "stroke": {
+                "signal": "zoomLevel === 0 ? '#ffffff' : '#c98a52'"
+              },
+              "strokeWidth": {
+                "signal": "zoomLevel === 0 ? 0.6 : 0.9"
+              },
+              "tooltip": {
+                "signal": "{'Nearest branch': datum.locality, 'Region (SA3)': datum.sa3, 'Branches here': datum.branches, 'Remoteness': datum.remoteness}"
+              }
+            },
+            "hover": {
+              "fillOpacity": {
+                "value": 1
+              },
+              "stroke": {
+                "value": "#141a24"
+              },
+              "strokeWidth": {
+                "value": 1.2
+              }
+            }
+          },
+          "aria": false
+        },
+        {
+          "type": "shape",
+          "from": {
+            "data": "mask"
+          },
+          "encode": {
+            "update": {
+              "fill": {
+                "value": "#eef1f5"
+              },
+              "stroke": {
+                "value": "none"
+              }
+            }
+          },
+          "transform": [
+            {
+              "type": "geoshape",
+              "projection": "proj"
+            }
+          ],
+          "aria": false
+        },
+        {
+          "type": "shape",
+          "from": {
+            "data": "vic"
+          },
+          "encode": {
+            "update": {
+              "fill": {
+                "value": "none"
+              },
+              "stroke": {
+                "value": "#3b4656"
+              },
+              "strokeWidth": {
+                "value": 1.2
+              }
+            }
+          },
+          "transform": [
+            {
+              "type": "geoshape",
+              "projection": "proj"
+            }
+          ],
+          "aria": false
+        },
+        {
+          "type": "symbol",
+          "from": {
+            "data": "branches"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "field": "x"
+              },
+              "y": {
+                "field": "y"
+              },
+              "size": {
+                "signal": "zoomLevel === 2 ? 16 : 7"
+              },
+              "fill": {
+                "value": "#141a24"
+              },
+              "fillOpacity": {
+                "value": 0.75
+              }
+            }
+          },
+          "aria": false
+        },
+        {
+          "type": "text",
+          "from": {
+            "data": "places"
+          },
+          "encode": {
+            "update": {
+              "x": {
+                "field": "x"
+              },
+              "y": {
+                "field": "y"
+              },
+              "dy": {
+                "signal": "datum.note ? 0 : -8"
+              },
+              "align": {
+                "signal": "datum.note ? (datum.lon > 147 ? 'right' : 'left') : 'center'"
+              },
+              "text": {
+                "field": "t"
+              },
+              "fontSize": {
+                "value": 11
+              },
+              "fill": {
+                "signal": "datum.note ? '#8f4508' : '#141a24'"
+              },
+              "font": {
+                "value": "Space Grotesk, system-ui, sans-serif"
+              },
+              "fontWeight": {
+                "value": "bold"
+              },
+              "opacity": {
+                "signal": "datum.note ? (zoomLevel === 0 ? 1 : 0) : (datum.level <= zoomLevel ? 1 : 0)"
+              },
+              "dx": {
+                "signal": "datum.note ? (datum.lon > 147 ? -8 : 8) : 0"
+              }
+            }
+          },
+          "aria": false
+        }
+      ],
+      "aria": false
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

@@ -1,0 +1,658 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "Sankey diagram of 100 consumer payments in 2022, flowing from the instrument used (cash, debit card, credit card, bank transfer and BPAY, other) to how the payment was made (in person with cash, inserted or swiped, tapped with a card, tapped with a phone, online, other). Tap-with-card carried 41 of every 100 payments and tap-with-phone 20.",
+  "usermeta": {
+    "source": "RBA Consumer Payments Survey Explorer export, All payments by number, 2022 wave; merchant fee context from RBA Retail Payments Statistics Table C3, June quarter 2026",
+    "url": "https://www.rba.gov.au/payments-and-infrastructure/consumer-payments-survey/",
+    "method": "Shares of payments by number. Debit and credit are split into the survey's channel categories; BPAY and internet/phone banking are grouped as bank transfer; cheque, gift card and other are grouped as other. Built in Vega because Vega-Lite has no Sankey layout.",
+    "fees": "Average total merchant fees, June quarter 2026: eftpos debit 0.43%, Visa debit 0.56%, Mastercard debit 0.59%, Visa credit 1.00%, Mastercard credit 0.99%, American Express 1.36% of transaction value."
+  },
+  "height": 400,
+  "padding": {
+    "top": 8,
+    "bottom": 48,
+    "left": 0,
+    "right": 0
+  },
+  "autosize": "none",
+  "signals": [
+    {
+      "name": "width",
+      "init": "containerSize()[0] || 600",
+      "on": [
+        {
+          "events": {
+            "source": "window",
+            "type": "resize"
+          },
+          "update": "containerSize()[0] || 600"
+        }
+      ]
+    },
+    {
+      "name": "narrow",
+      "update": "width < 520"
+    },
+    {
+      "name": "height",
+      "update": "narrow ? 620 : 400"
+    },
+    {
+      "name": "nodeWidth",
+      "value": 14
+    },
+    {
+      "name": "nodePad",
+      "value": 10
+    },
+    {
+      "name": "hover",
+      "value": null,
+      "on": [
+        {
+          "events": "@linkMarks:pointerover",
+          "update": "datum"
+        },
+        {
+          "events": "pointerout",
+          "update": "null"
+        }
+      ]
+    }
+  ],
+  "data": [
+    {
+      "name": "flows",
+      "url": "data/cps_instrument_channel_2022.csv",
+      "format": {
+        "type": "csv",
+        "parse": {
+          "share": "number"
+        }
+      },
+      "transform": [
+        {
+          "type": "formula",
+          "as": "srcOrder",
+          "expr": "indexof(['Cash','Debit card','Credit card','Bank transfer & BPAY','Other'], datum.source)"
+        },
+        {
+          "type": "formula",
+          "as": "tgtOrder",
+          "expr": "indexof(['In person','Tap with card','Tap with phone','Insert or swipe','Online','Other'], datum.target)"
+        }
+      ]
+    },
+    {
+      "name": "srcNodes",
+      "source": "flows",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": [
+            "source",
+            "srcOrder"
+          ],
+          "fields": [
+            "share"
+          ],
+          "ops": [
+            "sum"
+          ],
+          "as": [
+            "total"
+          ]
+        },
+        {
+          "type": "collect",
+          "sort": {
+            "field": "srcOrder"
+          }
+        },
+        {
+          "type": "stack",
+          "field": "total",
+          "as": [
+            "y0",
+            "y1"
+          ]
+        },
+        {
+          "type": "window",
+          "ops": [
+            "row_number"
+          ],
+          "as": [
+            "idx"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "name",
+          "expr": "datum.source"
+        },
+        {
+          "type": "formula",
+          "as": "stage",
+          "expr": "0"
+        }
+      ]
+    },
+    {
+      "name": "tgtNodes",
+      "source": "flows",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": [
+            "target",
+            "tgtOrder"
+          ],
+          "fields": [
+            "share"
+          ],
+          "ops": [
+            "sum"
+          ],
+          "as": [
+            "total"
+          ]
+        },
+        {
+          "type": "collect",
+          "sort": {
+            "field": "tgtOrder"
+          }
+        },
+        {
+          "type": "stack",
+          "field": "total",
+          "as": [
+            "y0",
+            "y1"
+          ]
+        },
+        {
+          "type": "window",
+          "ops": [
+            "row_number"
+          ],
+          "as": [
+            "idx"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "name",
+          "expr": "datum.target"
+        },
+        {
+          "type": "formula",
+          "as": "stage",
+          "expr": "1"
+        }
+      ]
+    },
+    {
+      "name": "nodes",
+      "source": [
+        "srcNodes",
+        "tgtNodes"
+      ],
+      "transform": [
+        {
+          "type": "formula",
+          "as": "label",
+          "expr": "datum.name + '  ' + format(datum.total, '.0f')"
+        }
+      ]
+    },
+    {
+      "name": "links",
+      "source": "flows",
+      "transform": [
+        {
+          "type": "collect",
+          "sort": {
+            "field": [
+              "srcOrder",
+              "tgtOrder"
+            ]
+          }
+        },
+        {
+          "type": "stack",
+          "groupby": [
+            "source"
+          ],
+          "field": "share",
+          "sort": {
+            "field": "tgtOrder"
+          },
+          "as": [
+            "sy0",
+            "sy1"
+          ]
+        },
+        {
+          "type": "stack",
+          "groupby": [
+            "target"
+          ],
+          "field": "share",
+          "sort": {
+            "field": "srcOrder"
+          },
+          "as": [
+            "ty0",
+            "ty1"
+          ]
+        },
+        {
+          "type": "lookup",
+          "from": "srcNodes",
+          "key": "source",
+          "fields": [
+            "source"
+          ],
+          "values": [
+            "y0",
+            "idx"
+          ],
+          "as": [
+            "sNodeY0",
+            "sIdx"
+          ]
+        },
+        {
+          "type": "lookup",
+          "from": "tgtNodes",
+          "key": "target",
+          "fields": [
+            "target"
+          ],
+          "values": [
+            "y0",
+            "idx"
+          ],
+          "as": [
+            "tNodeY0",
+            "tIdx"
+          ]
+        },
+        {
+          "type": "formula",
+          "as": "sourceY",
+          "expr": "scale('y', datum.sNodeY0 + (datum.sy0 + datum.sy1) / 2) + (datum.sIdx - 1) * nodePad"
+        },
+        {
+          "type": "formula",
+          "as": "targetY",
+          "expr": "scale('y', datum.tNodeY0 + (datum.ty0 + datum.ty1) / 2) + (datum.tIdx - 1) * nodePad"
+        },
+        {
+          "type": "formula",
+          "as": "sourceX",
+          "expr": "nodeWidth"
+        },
+        {
+          "type": "formula",
+          "as": "targetX",
+          "expr": "width - nodeWidth"
+        },
+        {
+          "type": "linkpath",
+          "orient": "horizontal",
+          "shape": "diagonal",
+          "sourceX": "sourceX",
+          "sourceY": "sourceY",
+          "targetX": "targetX",
+          "targetY": "targetY"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": [
+        0,
+        100
+      ],
+      "range": [
+        0,
+        {
+          "signal": "height - 4 * nodePad - 10"
+        }
+      ]
+    },
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": [
+        "Cash",
+        "Debit card",
+        "Credit card",
+        "Bank transfer & BPAY",
+        "Other"
+      ],
+      "range": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#0e9aa7",
+        "#7d8898"
+      ]
+    }
+  ],
+  "marks": [
+    {
+      "name": "linkMarks",
+      "type": "path",
+      "from": {
+        "data": "links"
+      },
+      "encode": {
+        "update": {
+          "path": {
+            "field": "path"
+          },
+          "stroke": {
+            "scale": "color",
+            "field": "source"
+          },
+          "strokeWidth": {
+            "signal": "max(1, scale('y', datum.share) - scale('y', 0))"
+          },
+          "strokeOpacity": {
+            "signal": "hover && hover !== datum ? 0.15 : 0.55"
+          },
+          "fill": {
+            "value": "none"
+          },
+          "tooltip": {
+            "signal": "{'From': datum.source, 'To': datum.target, 'Share of payments (%)': format(datum.share, '.1f')}"
+          }
+        },
+        "hover": {
+          "strokeOpacity": {
+            "value": 0.9
+          }
+        }
+      },
+      "aria": false
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "nodes"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.stage === 0 ? 0 : width - nodeWidth"
+          },
+          "width": {
+            "signal": "nodeWidth"
+          },
+          "y": {
+            "signal": "scale('y', datum.y0) + (datum.idx - 1) * nodePad"
+          },
+          "y2": {
+            "signal": "scale('y', datum.y1) + (datum.idx - 1) * nodePad"
+          },
+          "fill": {
+            "signal": "datum.stage === 0 ? scale('color', datum.name) : '#3b4656'"
+          },
+          "cornerRadius": {
+            "value": 2
+          },
+          "tooltip": {
+            "signal": "{'Node': datum.name, 'Share of payments (%)': format(datum.total, '.1f')}"
+          }
+        }
+      },
+      "aria": false
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "nodes"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.stage === 0 ? nodeWidth + 8 : width - nodeWidth - 8"
+          },
+          "align": {
+            "signal": "datum.stage === 0 ? 'left' : 'right'"
+          },
+          "y": {
+            "signal": "(scale('y', datum.y0) + scale('y', datum.y1)) / 2 + (datum.idx - 1) * nodePad"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "text": {
+            "field": "label"
+          },
+          "fontSize": {
+            "signal": "narrow ? 9 : (datum.total < 3 ? 9 : 11)"
+          },
+          "fill": {
+            "value": "#141a24"
+          },
+          "font": {
+            "value": "Space Grotesk, system-ui, sans-serif"
+          }
+        }
+      },
+      "aria": false
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "links"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "width / 2"
+          },
+          "y": {
+            "signal": "(datum.sourceY + datum.targetY) / 2"
+          },
+          "align": {
+            "value": "center"
+          },
+          "baseline": {
+            "value": "middle"
+          },
+          "text": {
+            "signal": "datum.share >= 13 ? datum.source + ' → ' + lower(datum.target) + ': ' + format(datum.share, '.0f') + ' of 100' : ''"
+          },
+          "fontSize": {
+            "value": 10
+          },
+          "fill": {
+            "value": "#141a24"
+          },
+          "font": {
+            "value": "Space Grotesk, system-ui, sans-serif"
+          }
+        }
+      },
+      "aria": false
+    }
+  ],
+  "legends": [
+    {
+      "fill": "color",
+      "orient": "bottom",
+      "direction": "horizontal",
+      "title": "Payment instrument",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 12,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "columnPadding": 18
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

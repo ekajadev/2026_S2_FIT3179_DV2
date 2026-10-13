@@ -1,0 +1,461 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Cash and non-cash shares of Australian consumer payments by number. Cash: 69% in 2007, 62% in 2010, 47% in 2013, 37% in 2016, 27% in 2019, 13% in 2022 and 15% in 2025. Non-cash is the complement. Cash stabilised between the last two survey waves.",
+  "usermeta": {
+    "source": "Scott Kim and Michael Reschke, Consumer Payment Behaviour in Australia, RBA Bulletin, 28 May 2026, Table 1",
+    "url": "https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html",
+    "method": "Published rounded cash shares. Non-cash = 100 minus cash. These are survey-wave observations, not annual data.",
+    "exclusions": "Payments over $9,999; automatic payments; transfers to family and friends; transport cards. Online payments included."
+  },
+  "width": "container",
+  "height": 300,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding",
+    "resize": true
+  },
+  "data": {
+    "values": [
+      {
+        "year": 2007,
+        "Cash": 69
+      },
+      {
+        "year": 2010,
+        "Cash": 62
+      },
+      {
+        "year": 2013,
+        "Cash": 47
+      },
+      {
+        "year": 2016,
+        "Cash": 37
+      },
+      {
+        "year": 2019,
+        "Cash": 27
+      },
+      {
+        "year": 2022,
+        "Cash": 13
+      },
+      {
+        "year": 2025,
+        "Cash": 15
+      }
+    ]
+  },
+  "transform": [
+    {
+      "calculate": "100 - datum.Cash",
+      "as": "Non-cash"
+    },
+    {
+      "fold": [
+        "Cash",
+        "Non-cash"
+      ],
+      "as": [
+        "method",
+        "share"
+      ]
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          2007,
+          2025.7
+        ]
+      },
+      "axis": {
+        "title": "Survey year",
+        "values": [
+          2007,
+          2013,
+          2019,
+          2025
+        ],
+        "format": "d",
+        "labelOverlap": true
+      }
+    },
+    "y": {
+      "field": "share",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          100
+        ]
+      },
+      "axis": {
+        "title": "Share of payments",
+        "values": [
+          0,
+          25,
+          50,
+          75,
+          100
+        ],
+        "labelExpr": "datum.value + '%'"
+      }
+    },
+    "color": {
+      "field": "method",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "Cash",
+          "Non-cash"
+        ],
+        "range": [
+          "#d96a10",
+          "#1f6fd6"
+        ]
+      },
+      "legend": {
+        "orient": "top",
+        "labelExpr": "datum.label"
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "line"
+      }
+    },
+    {
+      "params": [
+        {
+          "name": "hoverYear",
+          "select": {
+            "type": "point",
+            "fields": [
+              "year"
+            ],
+            "on": "pointerover",
+            "clear": "pointerout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "size": 64,
+        "stroke": "#f8fafc",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "year",
+            "type": "ordinal",
+            "title": "Survey"
+          },
+          {
+            "field": "method",
+            "title": "Payment group"
+          },
+          {
+            "field": "share",
+            "type": "quantitative",
+            "title": "Share (%)"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": {
+            "param": "hoverYear",
+            "empty": false
+          }
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "strokeDash": [
+          3,
+          3
+        ],
+        "aria": false
+      },
+      "encoding": {
+        "y": {
+          "datum": 0,
+          "type": "quantitative"
+        },
+        "y2": {
+          "datum": 100
+        },
+        "color": {
+          "value": "#8a97ab"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === 2025"
+        },
+        {
+          "calculate": "datum.method + ' ' + datum.share + '%'",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -4,
+        "dy": -16,
+        "fontSize": 11
+      },
+      "encoding": {
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === 2022 && datum.method === 'Cash'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "dy": 18,
+        "fontSize": 10
+      },
+      "encoding": {
+        "text": {
+          "value": "13%"
+        },
+        "color": {
+          "value": "#3b4656"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === 2007"
+        },
+        {
+          "calculate": "datum.method + ' ' + datum.share + '%'",
+          "as": "label"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 4,
+        "dy": {
+          "expr": "datum.method === 'Cash' ? -14 : 16"
+        },
+        "fontSize": 11
+      },
+      "encoding": {
+        "text": {
+          "field": "label"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2013.3,
+            "share": 12
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 10,
+        "color": "#3b4656",
+        "font": "Space Grotesk, system-ui, sans-serif"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "share",
+          "type": "quantitative"
+        },
+        "text": {
+          "value": "2013: non-cash passes cash"
+        },
+        "color": {
+          "value": "#3b4656"
+        }
+      }
+    }
+  ],
+  "title": {
+    "text": "Cash fell from 69% to 15% of payments",
+    "subtitle": "Share of consumer payments by number, seven Reserve Bank surveys"
+  },
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

@@ -1,0 +1,438 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Area chart of ATM cash withdrawals in Australia per year from 1995 to 2025, annotated with ten payment milestones. Withdrawals rose to a peak of 863 million in 2008, fell steadily as card and tap payments grew, dropped 28% in 2020 during the pandemic, and reached 338 million in 2025, 61% below the peak. Milestones include the first payments survey (2007), tapping overtaking cash (2019), the Optus outage (2023) and the 2026 cash acceptance law.",
+  "usermeta": {
+    "source": "RBA Retail Payments Statistics Table C4 (ATM withdrawals, annual sum of the monthly series); RBA Consumer Payments Survey 2007–2025; Australian Payments Plus; Australian Treasury; Senate inquiry into the 8 November 2023 Optus outage",
+    "url": "https://www.rba.gov.au/statistics/tables/",
+    "method": "Each milestone marker sits on the ATM curve at its year (the 2026 law is drawn level with the last observation, 2025, because the series ends there). Labels for 2018–2026 are stacked in a column to the right and joined to their markers by leader lines so they do not collide. EFTPOS (1984) predates the series and is noted in the subtitle."
+  },
+  "width": "container",
+  "height": 430,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": "ATM use peaked in 2008 and has fallen ever since",
+    "subtitle": "Bank ATM cash withdrawals per year, with the milestones that shaped them. EFTPOS card terminals arrived in 1984, before this series begins."
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/rba_atm_withdrawals_1995_2025.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "withdrawals_m": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "area",
+        "color": "#f9cfa3",
+        "line": {
+          "color": "#d96a10",
+          "strokeWidth": 2
+        },
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              1994.5,
+              2036.5
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Year",
+            "values": [
+              1995,
+              2000,
+              2005,
+              2010,
+              2015,
+              2020,
+              2025
+            ],
+            "format": "d",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "withdrawals_m",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1180
+            ]
+          },
+          "axis": {
+            "title": "ATM withdrawals per year (millions)",
+            "values": [
+              0,
+              200,
+              400,
+              600,
+              800,
+              1000
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "title": "Year",
+            "format": "d"
+          },
+          {
+            "field": "withdrawals_m",
+            "title": "ATM withdrawals (millions)",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/timeline_events.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "ly": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "lookup": "year",
+          "from": {
+            "data": {
+              "url": "data/rba_atm_withdrawals_1995_2025.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "year": "number",
+                  "withdrawals_m": "number"
+                }
+              }
+            },
+            "key": "year",
+            "fields": [
+              "withdrawals_m"
+            ]
+          }
+        },
+        {
+          "calculate": "datum.year === 2026 ? 338.3 : (isValid(datum.withdrawals_m) ? datum.withdrawals_m : 0)",
+          "as": "py"
+        },
+        {
+          "calculate": "datum.year >= 2018 ? 2026.9 : datum.year",
+          "as": "lx"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "color": "#9aa6b8",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "py",
+              "type": "quantitative"
+            },
+            "x2": {
+              "field": "lx"
+            },
+            "y2": {
+              "field": "ly"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "size": 90,
+            "stroke": "#ffffff",
+            "strokeWidth": 1.5,
+            "opacity": 1
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "py",
+              "type": "quantitative"
+            },
+            "color": {
+              "field": "theme",
+              "type": "nominal",
+              "scale": {
+                "domain": [
+                  "Adoption",
+                  "Infrastructure",
+                  "Cash",
+                  "Resilience"
+                ],
+                "range": [
+                  "#1f6fd6",
+                  "#6d4bd6",
+                  "#d96a10",
+                  "#d64545"
+                ]
+              },
+              "legend": {
+                "orient": "top",
+                "title": "Milestone type"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "label",
+                "title": "Milestone"
+              },
+              {
+                "field": "detail",
+                "title": "What happened"
+              },
+              {
+                "field": "source",
+                "title": "Source"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "fontSize": 11,
+            "font": "Space Grotesk, system-ui, sans-serif",
+            "color": "#3b4656",
+            "baseline": "middle",
+            "align": {
+              "expr": "datum.align"
+            },
+            "dx": {
+              "expr": "datum.align === 'right' ? -5 : 5"
+            }
+          },
+          "encoding": {
+            "x": {
+              "field": "lx",
+              "type": "quantitative"
+            },
+            "y": {
+              "field": "ly",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2025,
+            "v": 338.3,
+            "t": "338 million in 2025, 61% below the peak"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "dx": -8,
+        "dy": 22,
+        "fontSize": 10,
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "color": "#8f4508"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "v",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

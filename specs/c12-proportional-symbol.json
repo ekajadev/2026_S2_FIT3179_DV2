@@ -1,0 +1,701 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Coordinated views: a proportional symbol map of bank branches by SA3 region and a line chart of total branches per year, June 2017 to June 2025. Dragging across years on the line chart sets the period; the map shows each region's branches at the end of that period (circle area) and the percentage change over it (colour). Over the full period Australia went from 5,673 to 3,191 matched branches, a fall of 44%.",
+  "usermeta": {
+    "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 1 (Branch channel), aggregated to ABS SA3 2021 regions by year; ABS ASGS Edition 3 SA3 and STE 2021 boundaries",
+    "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
+    "method": "Branches summed by SA3 name and year and drawn at each SA3's interior centroid. Overview+detail follows the Week 10 studio: an interval brush on the line chart filters the map. For each region the first and last year inside the brush are found with argmin/argmax, giving branches at the end of the period and the change across it. With no brush the whole 2017–2025 period is used.",
+    "projection": "Conic equal-area with standard parallels 18°S and 36°S.",
+    "zoom": {
+      "min": 1,
+      "max": 6,
+      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
+      "projectedBounds": [
+        -44.355,
+        94.135,
+        49.856,
+        184.144
+      ],
+      "reason": "east-coast circles overlap; 6× separates city regions",
+      "width": 1040,
+      "height": 430
+    }
+  },
+  "title": {
+    "text": "Australia closed 44% of its bank branches in eight years",
+    "subtitle": "Drag across years on the line chart to compare any two Junes. Circle size = branches at the end of the period; colour = change over it."
+  },
+  "params": [
+    {
+      "name": "mapZoom",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 6,
+        "step": 0.1,
+        "name": "Zoom: "
+      }
+    },
+    {
+      "name": "mapCentre",
+      "value": [
+        2.751,
+        139.139
+      ],
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            2.751,
+            139.139
+          ],
+          [
+            41.371,
+            160.285
+          ],
+          [
+            26.924,
+            168.853
+          ],
+          [
+            48.03,
+            144.205
+          ],
+          [
+            -35.436,
+            154.346
+          ],
+          [
+            14.117,
+            160.321
+          ],
+          [
+            30.265,
+            182.346
+          ],
+          [
+            -3.019,
+            100.876
+          ]
+        ],
+        "labels": [
+          "Whole country",
+          "Sydney",
+          "Melbourne",
+          "Brisbane",
+          "Perth",
+          "Adelaide",
+          "Hobart",
+          "Darwin"
+        ],
+        "name": "Map centre: "
+      }
+    }
+  ],
+  "vconcat": [
+    {
+      "width": 1040,
+      "height": 430,
+      "projection": {
+        "type": "conicEqualArea",
+        "parallels": [
+          -18,
+          -36
+        ],
+        "rotate": [
+          -132,
+          0,
+          0
+        ],
+        "scale": {
+          "expr": "150 * min(1040 / 94.211, 430 / 90.009) * mapZoom"
+        },
+        "translate": {
+          "expr": "[1040 / 2 - mapCentre[0] * min(1040 / 94.211, 430 / 90.009) * mapZoom, 430 / 2 - mapCentre[1] * min(1040 / 94.211, 430 / 90.009) * mapZoom]"
+        },
+        "clipExtent": [
+          [
+            0,
+            0
+          ],
+          [
+            1040,
+            430
+          ]
+        ]
+      },
+      "layer": [
+        {
+          "data": {
+            "url": "data/geo/ste_2021.topo.json",
+            "format": {
+              "type": "topojson",
+              "feature": "STE_2021_AUST_GDA2020"
+            }
+          },
+          "mark": {
+            "type": "geoshape",
+            "fill": "#dfe5ed",
+            "stroke": "#ffffff",
+            "strokeWidth": 0.8,
+            "clip": true,
+            "aria": false
+          }
+        },
+        {
+          "data": {
+            "url": "data/apra_sa3_by_year_2017_2025.csv",
+            "format": {
+              "type": "csv",
+              "parse": {
+                "year": "number",
+                "branches": "number",
+                "atms": "number",
+                "bankpost": "number",
+                "lon": "number",
+                "lat": "number"
+              }
+            }
+          },
+          "transform": [
+            {
+              "filter": {
+                "param": "yearBrush",
+                "empty": true
+              }
+            },
+            {
+              "aggregate": [
+                {
+                  "op": "argmin",
+                  "field": "year",
+                  "as": "first"
+                },
+                {
+                  "op": "argmax",
+                  "field": "year",
+                  "as": "last"
+                }
+              ],
+              "groupby": [
+                "sa3",
+                "state",
+                "lon",
+                "lat"
+              ]
+            },
+            {
+              "calculate": "datum.first.branches",
+              "as": "start"
+            },
+            {
+              "calculate": "datum.last.branches",
+              "as": "end"
+            },
+            {
+              "calculate": "datum.first.year",
+              "as": "y0"
+            },
+            {
+              "calculate": "datum.last.year",
+              "as": "y1"
+            },
+            {
+              "calculate": "datum.start > 0 ? (datum.end - datum.start) / datum.start * 100 : null",
+              "as": "change"
+            }
+          ],
+          "layer": [
+            {
+              "mark": {
+                "type": "circle",
+                "opacity": 0.8,
+                "stroke": "#ffffff",
+                "strokeWidth": 0.6,
+                "clip": true
+              },
+              "encoding": {
+                "longitude": {
+                  "field": "lon",
+                  "type": "quantitative"
+                },
+                "latitude": {
+                  "field": "lat",
+                  "type": "quantitative"
+                },
+                "size": {
+                  "field": "end",
+                  "type": "quantitative",
+                  "scale": {
+                    "type": "sqrt",
+                    "domain": [
+                      1,
+                      120
+                    ],
+                    "range": [
+                      10,
+                      1400
+                    ]
+                  },
+                  "legend": {
+                    "orient": "bottom-left",
+                    "title": "Branches at end of period",
+                    "values": [
+                      5,
+                      25,
+                      100
+                    ],
+                    "symbolFillColor": "#9aa6b8",
+                    "symbolStrokeColor": "#ffffff",
+                    "direction": "horizontal",
+                    "columns": 3
+                  }
+                },
+                "color": {
+                  "field": "change",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": [
+                      -60,
+                      60
+                    ],
+                    "clamp": true,
+                    "range": [
+                      "#c2410c",
+                      "#e07a3a",
+                      "#f0b48a",
+                      "#f6dcc6",
+                      "#e4e9f0",
+                      "#bcd3f2",
+                      "#7fa9e4",
+                      "#3d7dd4",
+                      "#1b55a8"
+                    ]
+                  },
+                  "legend": {
+                    "orient": "bottom-right",
+                    "direction": "horizontal",
+                    "gradientLength": 160,
+                    "title": "Change over period",
+                    "labelExpr": "datum.value + '%'",
+                    "values": [
+                      -60,
+                      0,
+                      60
+                    ]
+                  }
+                },
+                "tooltip": [
+                  {
+                    "field": "sa3",
+                    "title": "Region (SA3)"
+                  },
+                  {
+                    "field": "state",
+                    "title": "State"
+                  },
+                  {
+                    "field": "y0",
+                    "title": "From (June)"
+                  },
+                  {
+                    "field": "start",
+                    "title": "Branches then"
+                  },
+                  {
+                    "field": "y1",
+                    "title": "To (June)"
+                  },
+                  {
+                    "field": "end",
+                    "title": "Branches now"
+                  },
+                  {
+                    "field": "change",
+                    "title": "Change (%)",
+                    "format": "+.0f"
+                  }
+                ]
+              },
+              "transform": [
+                {
+                  "filter": "datum.end > 0"
+                }
+              ]
+            },
+            {
+              "transform": [
+                {
+                  "filter": "datum.end > 0"
+                },
+                {
+                  "filter": "indexof(['Sydney Inner City','Melbourne City','Brisbane Inner','Newcastle'], datum.sa3) >= 0"
+                },
+                {
+                  "calculate": "replace(replace(datum.sa3, ' Inner City', ''), ' City', '') + ' ' + datum.start + ' → ' + datum.end",
+                  "as": "lbl"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "align": "left",
+                "dx": 16,
+                "fontSize": 10.5,
+                "font": "Space Grotesk, system-ui, sans-serif",
+                "color": "#141a24",
+                "clip": true
+              },
+              "encoding": {
+                "longitude": {
+                  "field": "lon",
+                  "type": "quantitative"
+                },
+                "latitude": {
+                  "field": "lat",
+                  "type": "quantitative"
+                },
+                "text": {
+                  "field": "lbl"
+                }
+              }
+            },
+            {
+              "transform": [
+                {
+                  "aggregate": [
+                    {
+                      "op": "sum",
+                      "field": "start",
+                      "as": "s"
+                    },
+                    {
+                      "op": "sum",
+                      "field": "end",
+                      "as": "e"
+                    },
+                    {
+                      "op": "min",
+                      "field": "y0",
+                      "as": "a"
+                    },
+                    {
+                      "op": "max",
+                      "field": "y1",
+                      "as": "z"
+                    }
+                  ]
+                },
+                {
+                  "calculate": "'June ' + datum.a + ' → June ' + datum.z + ': ' + format(datum.s, ',') + ' → ' + format(datum.e, ',') + ' branches (' + format((datum.e / datum.s - 1) * 100, '+.0f') + '%)'",
+                  "as": "lbl"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "align": "left",
+                "x": 0,
+                "y": 12,
+                "fontSize": 13,
+                "fontWeight": 600,
+                "font": "Space Grotesk, system-ui, sans-serif",
+                "color": "#8f4508"
+              },
+              "encoding": {
+                "text": {
+                  "field": "lbl"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1040,
+      "height": 90,
+      "data": {
+        "url": "data/apra_sa3_by_year_2017_2025.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "branches": "number",
+            "atms": "number",
+            "bankpost": "number",
+            "lon": "number",
+            "lat": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "branches",
+              "as": "total"
+            }
+          ],
+          "groupby": [
+            "year"
+          ]
+        }
+      ],
+      "title": {
+        "text": "Drag across years here to choose the period (click outside to clear)",
+        "fontSize": 12,
+        "fontWeight": 500,
+        "anchor": "start"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              2017,
+              2025
+            ]
+          },
+          "axis": {
+            "title": "Year (June)",
+            "format": "d",
+            "values": [
+              2017,
+              2018,
+              2019,
+              2020,
+              2021,
+              2022,
+              2023,
+              2024,
+              2025
+            ],
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "total",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              2500,
+              6000
+            ]
+          },
+          "axis": {
+            "title": "Branches",
+            "values": [
+              3000,
+              4000,
+              5000,
+              6000
+            ],
+            "labelExpr": "format(datum.value, ',')"
+          }
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "line",
+            "color": "#d96a10",
+            "strokeWidth": 2
+          },
+          "params": [
+            {
+              "name": "yearBrush",
+              "select": {
+                "type": "interval",
+                "encodings": [
+                  "x"
+                ],
+                "mark": {
+                  "fill": "#1f6fd6",
+                  "fillOpacity": 0.12,
+                  "stroke": "#1f6fd6",
+                  "aria": false
+                }
+              }
+            }
+          ]
+        },
+        {
+          "mark": {
+            "type": "point",
+            "filled": true,
+            "color": "#d96a10",
+            "size": 40
+          },
+          "encoding": {
+            "tooltip": [
+              {
+                "field": "year",
+                "title": "June"
+              },
+              {
+                "field": "total",
+                "title": "Branches",
+                "format": ","
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

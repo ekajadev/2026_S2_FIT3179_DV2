@@ -1,0 +1,306 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Heatmap of the share of payments made by tapping a phone or watch, by age group and survey wave, 2016 to 2022. Under-30s went from 1% to 37%; over-65s from under 1% to 6%.",
+  "usermeta": {
+    "source": "RBA Consumer Payments Survey Explorer export, Age dimension, payments by number: Debit_Tap device plus Credit_Tap device",
+    "url": "https://www.rba.gov.au/payments-and-infrastructure/consumer-payments-survey/",
+    "method": "Share of all payments by that age group made with a mobile device (debit and credit combined). Not published by age for 2025 on this basis; the companion chart uses the 2025 'any mobile device use' measure instead."
+  },
+  "width": "container",
+  "height": 250,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": "Phones replaced cards one generation at a time",
+    "subtitle": "Share of payments made by tapping a phone or watch, %",
+    "offset": 26
+  },
+  "data": {
+    "url": "data/cps_age_tap_device_2016_2022.csv"
+  },
+  "encoding": {
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "axis": {
+        "title": "Survey year",
+        "labelFontSize": 12,
+        "labelPadding": 8
+      }
+    },
+    "y": {
+      "field": "age",
+      "type": "ordinal",
+      "sort": [
+        "18-29",
+        "30-39",
+        "40-49",
+        "50-64",
+        "65+"
+      ],
+      "axis": {
+        "title": "Age group",
+        "labelFontSize": 12,
+        "labelPadding": 10,
+        "grid": false
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rect",
+        "stroke": "#f8fafc",
+        "strokeWidth": 2,
+        "cornerRadius": 3
+      },
+      "encoding": {
+        "color": {
+          "field": "tap_device_share",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              40
+            ],
+            "range": [
+              "#ece6fb",
+              "#d6cbf6",
+              "#bca9ee",
+              "#9f86e3",
+              "#8366d6",
+              "#6a48c4",
+              "#512fa8"
+            ]
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal",
+            "gradientLength": 180,
+            "title": "% of payments",
+            "labelExpr": "datum.value + '%'"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "age",
+            "title": "Age"
+          },
+          {
+            "field": "year",
+            "title": "Survey"
+          },
+          {
+            "field": "tap_device_share",
+            "title": "Tap with phone/watch (%)"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 13,
+        "font": "Space Grotesk, system-ui, sans-serif"
+      },
+      "encoding": {
+        "text": {
+          "field": "tap_device_share",
+          "type": "quantitative",
+          "format": ".0f"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.tap_device_share > 20",
+            "value": "#ffffff"
+          },
+          "value": "#141a24"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Under-30s: 1% → 37% of payments in six years"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "bottom",
+        "fontSize": 10.5,
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "color": "#512fa8",
+        "fontWeight": 600
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "y": {
+          "value": -8
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

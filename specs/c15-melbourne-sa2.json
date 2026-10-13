@@ -1,0 +1,607 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Choropleth of Greater Melbourne's SA2 neighbourhoods coloured by places to get cash (bank branches, Bank@Post outlets and bank ATMs) per 10,000 residents in June 2025, with the location of every bank branch overlaid as a dot for either June 2017 or June 2025, chosen with a toggle. Melbourne had 848 branches in 2017 and 430 in 2025. Many growth-area and middle-ring suburbs have no cash point at all, while shopping-centre suburbs have ten or more per 10,000.",
+  "usermeta": {
+    "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 2 (service points and population by SA2) and Table 1 (branch latitude and longitude); ABS ASGS Edition 3 SA2 2021 boundaries, Greater Melbourne only",
+    "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
+    "method": "Observed counts, not modelled. Cash points = branches + Bank@Post + ADI-operated ATMs ÷ APRA's SA2 population × 10,000. SA2s with no APRA record have zero points. Colour is capped at 12 per 10,000 so the CBD and airport (tiny resident populations) do not flatten the scale. Branch dots are APRA's reported coordinates, summed where several branches share a location. Boundaries simplified to 6% in mapshaper.",
+    "projection": "Conic equal-area fitted to Greater Melbourne.",
+    "zoom": {
+      "min": 1,
+      "max": 5,
+      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
+      "projectedBounds": [
+        -1.381,
+        155.854,
+        1.817,
+        159.315
+      ],
+      "reason": "already a city map; 5× reaches individual suburbs"
+    }
+  },
+  "width": "container",
+  "height": 440,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": "Melbourne lost half its bank branches. Where cash is now depends on the suburb.",
+    "subtitle": [
+      "Fill: branches, Bank@Post and bank ATMs per 10,000 residents by SA2 (suburb-sized ABS areas), June 2025, capped at 12. Dots: bank branches in the",
+      "chosen year."
+    ]
+  },
+  "params": [
+    {
+      "name": "branchYear",
+      "value": 2025,
+      "bind": {
+        "input": "radio",
+        "options": [
+          2017,
+          2025
+        ],
+        "labels": [
+          "June 2017",
+          "June 2025"
+        ],
+        "name": "Show branches in "
+      }
+    },
+    {
+      "name": "mapZoom",
+      "value": 1,
+      "bind": {
+        "input": "range",
+        "min": 1,
+        "max": 5,
+        "step": 0.1,
+        "name": "Zoom: "
+      }
+    },
+    {
+      "name": "mapCentre",
+      "value": [
+        0.218,
+        157.584
+      ],
+      "bind": {
+        "input": "select",
+        "options": [
+          [
+            0.218,
+            157.584
+          ],
+          [
+            -0.077,
+            157.525
+          ],
+          [
+            0.444,
+            157.979
+          ],
+          [
+            -0.702,
+            157.752
+          ],
+          [
+            0.257,
+            158.39
+          ],
+          [
+            -0.124,
+            156.965
+          ]
+        ],
+        "labels": [
+          "Whole city",
+          "Melbourne CBD",
+          "Dandenong",
+          "Werribee",
+          "Frankston",
+          "Craigieburn"
+        ],
+        "name": "Map centre: "
+      }
+    }
+  ],
+  "projection": {
+    "type": "conicEqualArea",
+    "parallels": [
+      -37,
+      -38.5
+    ],
+    "rotate": [
+      -145,
+      0,
+      0
+    ],
+    "scale": {
+      "expr": "150 * min(width / 3.198, height / 3.461) * mapZoom"
+    },
+    "translate": {
+      "expr": "[width / 2 - mapCentre[0] * min(width / 3.198, height / 3.461) * mapZoom, height / 2 - mapCentre[1] * min(width / 3.198, height / 3.461) * mapZoom]"
+    },
+    "clipExtent": {
+      "expr": "[[0, 0], [width, height]]"
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/geo/sa2_melbourne_2021.topo.json",
+        "format": {
+          "type": "topojson",
+          "feature": "SA2_2021_AUST_GDA2020"
+        }
+      },
+      "transform": [
+        {
+          "lookup": "properties.SA2_NAME21",
+          "from": {
+            "data": {
+              "url": "data/apra_sa2_melbourne_2025.csv"
+            },
+            "key": "sa2",
+            "fields": [
+              "population",
+              "branches",
+              "branches_2017",
+              "bankpost",
+              "atms",
+              "cash_points",
+              "cash_points_per_10k"
+            ]
+          }
+        },
+        {
+          "calculate": "isValid(datum.cash_points) ? datum.cash_points : 0",
+          "as": "points"
+        },
+        {
+          "calculate": "isValid(datum.cash_points_per_10k) ? datum.cash_points_per_10k : 0",
+          "as": "rate"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#f8fafc",
+        "strokeWidth": 0.5,
+        "clip": true
+      },
+      "encoding": {
+        "color": {
+          "field": "rate",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              12
+            ],
+            "clamp": true,
+            "range": [
+              "#fde8d2",
+              "#f9cfa3",
+              "#f3b26f",
+              "#ea9340",
+              "#d9741b",
+              "#b85c0f",
+              "#8f4508"
+            ]
+          },
+          "legend": {
+            "orient": "bottom-right",
+            "direction": "horizontal",
+            "gradientLength": 150,
+            "title": "Cash points per 10,000",
+            "values": [
+              0,
+              4,
+              8,
+              12
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "properties.SA2_NAME21",
+            "title": "Suburb (SA2)"
+          },
+          {
+            "field": "rate",
+            "title": "Cash points per 10,000"
+          },
+          {
+            "field": "points",
+            "title": "Cash points"
+          },
+          {
+            "field": "branches",
+            "title": "Branches 2025"
+          },
+          {
+            "field": "branches_2017",
+            "title": "Branches 2017"
+          },
+          {
+            "field": "bankpost",
+            "title": "Bank@Post"
+          },
+          {
+            "field": "atms",
+            "title": "Bank ATMs"
+          },
+          {
+            "field": "population",
+            "title": "Residents",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/apra_melbourne_branch_points_2017_2025.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "lat": "number",
+            "lon": "number",
+            "branches": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.year === branchYear"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "color": "#1f6fd6",
+        "opacity": 0.85,
+        "stroke": "#eef1f5",
+        "strokeWidth": 0.6,
+        "clip": true
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "branches",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              1,
+              20
+            ],
+            "range": [
+              14,
+              260
+            ]
+          },
+          "legend": {
+            "orient": "bottom-left",
+            "title": "Bank branches at an address",
+            "values": [
+              1,
+              5,
+              10
+            ],
+            "symbolFillColor": "#1f6fd6",
+            "symbolStrokeColor": "#ffffff",
+            "direction": "horizontal"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "locality",
+            "title": "Locality"
+          },
+          {
+            "field": "year",
+            "title": "Year"
+          },
+          {
+            "field": "branches",
+            "title": "Branches here"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/apra_melbourne_branch_points_2017_2025.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "branches": "number"
+          }
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.year === branchYear"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "branches",
+              "as": "total"
+            }
+          ]
+        },
+        {
+          "calculate": "'Blue dots: bank branches, June ' + branchYear + ' (' + datum.total + ' in Greater Melbourne)'",
+          "as": "lbl"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "x": 0,
+        "y": 12,
+        "fontSize": 13,
+        "fontWeight": 500,
+        "color": "#1f6fd6",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "clip": true
+      },
+      "encoding": {
+        "text": {
+          "field": "lbl"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 144.963,
+            "lat": -37.814,
+            "t": "CBD"
+          },
+          {
+            "lon": 145.215,
+            "lat": -37.987,
+            "t": "Dandenong"
+          },
+          {
+            "lon": 144.66,
+            "lat": -37.9,
+            "t": "Werribee"
+          },
+          {
+            "lon": 144.94,
+            "lat": -37.6,
+            "t": "Craigieburn"
+          },
+          {
+            "lon": 145.35,
+            "lat": -37.75,
+            "t": "Lilydale"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "dy": -10,
+        "fontSize": 10,
+        "color": "#141a24",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "clip": true
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 144.35,
+            "lat": -38.42,
+            "t": [
+              "59 of 286 suburbs have",
+              "one cash point or none"
+            ]
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 10.5,
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "color": "#8f4508",
+        "fontWeight": 600
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

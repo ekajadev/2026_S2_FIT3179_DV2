@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html lang="en-AU">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="#1f2228" name="theme-color"/>
+<meta content="Cash is out, now what? A visual story about how Australia went cashless, and who still needs cash, 2007–2026." name="description"/>
+<meta content="Jake" name="author"/>
+<title>Cash is out, now what?</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="styles.css" rel="stylesheet"/>
+</head>
+<body id="top">
+<div class="frame">
+<div class="hero-shell">
+<div class="hero wrap">
+<div class="hero-copy">
+<p class="eyebrow">FIT3179 Data Visualisation 2 · Jake Axarlis · Monash University · October 2026
+                    </p>
+<h1>Cash is out,<br/>now what?</h1><p class="hero-description">In 2007 the Reserve Bank asked Australians to keep a diary of every payment they made for a week, and 69% of those payments were cash. By 2025 it was 15%. That fall happened in six layers: debit cards, tap-and-go, phone wallets, the payment networks behind the tap, newer ways to pay like PayID, and the places cash still comes from. This page follows each layer in turn. The first half is about how Australians pay; the second is about where they can still get cash, because those two stopped moving together. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-2">2</a>, <a href="#ref-4">4</a>]</span></p>
+</div>
+<figure class="hero-chart">
+<div class="plot hero-plot" id="c1-line">
+<div class="chart-placeholder">
+<p>Cash fell from 69% to 15%.</p><span>Interactive chart unavailable. The complete data is
+                                below.</span>
+</div>
+</div>
+<figcaption class="chart-caption"><span class="note">Note: Survey years only (2007, 2010, 2013, 2016, 2019, 2022, 2025); the lines between them are not yearly data. Excludes payments over $9,999, automatic payments, transfers to friends and family, and transport cards.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments Survey 2007–2025 (Kim
+                            &amp; Reschke 2026, Table 1). <span class="cite">[<a href="#ref-1">1</a>]</span></span>
+</figcaption>
+</figure>
+</div>
+</div>
+<main id="story">
+<div class="reading-key wrap">
+<p class="eyebrow">Colour key</p>
+<ul aria-label="Colour key" class="key">
+<li style="--swatch: var(--cash)">Cash</li>
+<li style="--swatch: var(--debit)">Debit card</li>
+<li style="--swatch: var(--credit)">Credit card</li>
+<li style="--swatch: var(--other)">Other methods</li>
+</ul>
+<p class="preview-note">On the maps, an orange ramp always means access to cash and a purple ramp means
+                    digital access or adoption. Darker is more.</p>
+</div>
+<section aria-labelledby="heading-cash" class="chapter tone-cash" id="cash-was-king">
+<div class="wrap section-grid">
+<div class="section-intro">
+<p class="chapter-index">Before the layers</p>
+<h2 id="heading-cash">When cash<br/>was king.</h2><p>Seven in every ten payments in 2007 were notes and coins. The survey only splits the country two ways, capital cities and everywhere else, and both started at about 69%. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-2">2</a>]</span></p>
+</div>
+<div class="section-visuals">
+<figure class="chart-card">
+<div class="plot waffle-plot" id="c2-waffle">
+<div class="chart-placeholder">
+<p>69 cash payments became 15.</p><span>Out of every 100 payments: 69 cash / 31
+                                        non-cash in 2007; 15 cash / 85 non-cash in 2025.</span>
+</div>
+</div>
+<figcaption><p class="insight">Fifty-four of every hundred payments moved off cash in eighteen years. The 2025 grid is also the first time cash didn't fall: it went from 13% in 2022 to 15%. <span class="cite">[<a href="#ref-1">1</a>]</span></p><span class="note">Note: Rounded survey estimates. Each square is one percentage point of payments, not one person.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments
+                                    Survey, 2007 and 2025 (Kim &amp; Reschke 2026, Table 1). <span class="cite">[<a href="#ref-1">1</a>]</span></span></figcaption>
+</figure>
+<figure class="chart-card">
+<div id="m0-two-class-map">
+<div class="chart-placeholder">
+<p>One country. Two speeds of change.</p><span>Two-class map: cash share of
+                                        payments, capital cities vs regional Australia</span>
+</div>
+</div>
+<figcaption><p class="insight">The regions held on to cash longer, but not for long. The gap opened to 9.2 points in 2016, 34% of payments in the capitals against 44% everywhere else, then closed to under three points by 2022. Where people lived changed how fast they gave up cash, not whether they did. <span class="cite">[<a href="#ref-2">2</a>]</span></p><span class="note">Note: Survey data from 2007–2022 has been placed onto today's (2021) ABS greater capital city boundaries. The survey only splits Australia into capital cities and the rest, so every regional area shows the same national figure.</span><span class="source">Source: Reserve Bank of
+                                    Australia, Consumer Payments Survey 2007–2022; Australian Bureau of Statistics
+                                    boundaries. <span class="cite">[<a href="#ref-2">2</a>, <a href="#ref-5">5</a>]</span></span></figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="heading-debit" class="chapter tone-debit" id="own-money-on-a-card">
+<div class="wrap section-grid">
+<div class="section-intro">
+<p class="chapter-index">Layer 1 · Debit cards</p>
+<h2 id="heading-debit">Your own money.<br/>On a card.</h2><p>Australians went cashless on debit, not credit. They spent money that was already in their account, on terminals that were already on the counter. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-4">4</a>]</span></p>
+</div>
+<div class="section-visuals">
+<figure class="chart-card">
+<div id="c3-streamgraph">
+<div class="chart-placeholder">
+<p>Debit carried the transition.</p><span>Streamgraph: share of payments by method,
+                                        seven survey waves</span>
+</div>
+</div>
+<figcaption><p class="insight">Debit's share went from 15% of payments in 2007 to 49% in 2025, and it passed cash somewhere between the 2016 and 2019 surveys. Credit only went from 11% to 23%. Each band's thickness is its share, so all four always add to 100. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-2">2</a>]</span></p><span class="note">Note: 2007–2022 come from the Reserve Bank's survey data explorer and 2025 from its May 2026 Bulletin. "Other" is calculated so each year adds to 100%.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments Survey
+                                    2007–2025. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-2">2</a>]</span></span></figcaption>
+</figure>
+<figure class="chart-card">
+<div id="m1-eftpos-choropleth">
+<div class="chart-placeholder">
+<p>Before the tap, there had to be a terminal.</p><span>Choropleth: EFTPOS terminals
+                                        per 1,000 residents by state</span>
+</div>
+</div>
+<figcaption><p class="insight">Every state still has plenty of card terminals, from 13 for every 1,000 people in South Australia to 49 in the ACT, and their numbers only fell 10–19% after 2017. Bank ATMs went much faster. Australia had 13,814 in 2017 and 5,143 in 2025, and Western Australia and the ACT each lost more than 70% of theirs. <span class="cite">[<a href="#ref-4">4</a>]</span></p><span class="note">Note: Terminals are reported at state level only. Only banks and other deposit-taking institutions report to APRA, so independent ATMs (for example in pubs and shops) are not counted. Data from 2017 has been placed onto today's (2021) state boundaries.</span><span class="source">Source: Australian Prudential Regulation Authority, Points of
+                                    Presence 2017–2025; Australian Bureau of Statistics boundaries. <span class="cite">[<a href="#ref-4">4</a>, <a href="#ref-5">5</a>]</span></span>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="heading-tap" class="chapter tone-debit" id="tap-and-go">
+<div class="wrap section-grid">
+<div class="section-intro">
+<p class="chapter-index">Layer 2 · Tap and go</p>
+<h2 id="heading-tap">Tap and go.</h2><p>Small purchases were where cash lasted longest. Tap-and-go took them anyway. <span class="cite">[<a href="#ref-2">2</a>]</span></p>
+</div>
+<div class="section-visuals paired">
+<figure class="chart-card">
+<div id="c5-ridgeline">
+<div class="chart-placeholder">
+<p>Even the smallest purchase became a tap.</p><span>Ridgeline: cash share within
+                                        each payment-size band</span>
+</div>
+</div>
+<figcaption><p class="insight">In 2007, 95% of payments under $10 were cash. In 2016 it was still 62%, then contactless cards caught up with the coffee and the newspaper, and by 2022 it was 23%. The bigger the payment, the earlier cash lost it: over $500, cash was only 19% to begin with. <span class="cite">[<a href="#ref-2">2</a>]</span></p><span class="note">Note: The 2025 survey does not publish payment-size groups, so this chart stops at 2022.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments Survey
+                                    2007–2022. <span class="cite">[<a href="#ref-2">2</a>]</span></span></figcaption>
+</figure>
+<figure class="chart-card">
+<div id="m2-transit-dot-map">
+<div class="chart-placeholder">
+<p>Cards lost a little ground almost everywhere, most of all on transport.</p>
+<span>Slope chart: card share of payments by sector</span>
+</div>
+</div>
+<figcaption><p class="insight">Cards actually lost ground between 2022 and 2025, in seven of the ten sectors. Services fell furthest, from 62% to 51%, and transport from 87% to 80%. Only holidays and bills went up. That lines up with the opening chart, where cash stopped falling in 2025. <span class="cite">[<a href="#ref-1">1</a>]</span></p><span class="note">Note: 2022 values are calculated from the published 2025 share and the published change since 2022.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments Survey
+                                    2022 and 2025. <span class="cite">[<a href="#ref-1">1</a>]</span></span>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="heading-wallet" class="chapter tone-wallet" id="leave-the-wallet-at-home">
+<div class="wrap section-grid">
+<div class="section-intro">
+<p class="chapter-index">Layer 3 · Phone wallets</p>
+<h2 id="heading-wallet">Leave the wallet<br/>at home.</h2><p>Paying with a phone is mostly a young person's habit, and the gap between generations is getting wider, not narrower. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-2">2</a>]</span></p>
+</div>
+<div class="section-visuals paired">
+<figure class="chart-card">
+<div id="c6-heatmap">
+<div class="chart-placeholder">
+<p>A generation at a time.</p><span>Heatmap: share of payments tapped with a phone
+                                        or watch, by age</span>
+</div>
+</div>
+<figcaption><p class="insight">In 2016 no age group used a phone or watch for more than about 1% of its payments. By 2022 under-30s used one for 37% of theirs; over-65s, 6%. The 2025 survey doesn't break payments down by age, so the grid stops at 2022. <span class="cite">[<a href="#ref-2">2</a>]</span></p><span class="note">Note: Share of each age group's payments made with a phone or watch (debit and credit combined). Not published by age for 2025.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments Survey
+                                    2016–2022. <span class="cite">[<a href="#ref-2">2</a>]</span></span></figcaption>
+</figure>
+<figure class="chart-card">
+<div id="c7-dumbbell">
+<div class="chart-placeholder">
+<p>Young and old, still far apart.</p><span>Dumbbell: share of people paying by
+                                        phone, 2019 vs 2025</span>
+</div>
+</div>
+<figcaption><p class="insight">The 2025 survey asked a simpler question: have you paid with a phone or watch at all this week? Every age group said yes more often, but not at the same rate. Under-30s went from 18% to 69% and over-65s from 3% to 17%, so the gap between them grew from 15 points to 51. <span class="cite">[<a href="#ref-1">1</a>]</span></p><span class="note">Note: Share of people who made at least one phone or watch payment in the survey week. This is a different measure from the chart beside it.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments Survey
+                                    2019–2025. <span class="cite">[<a href="#ref-1">1</a>]</span></span></figcaption>
+</figure>
+<figure class="chart-card full-width">
+<div id="m3-cartogram-adii">
+<div class="chart-placeholder">
+<p>Going digital depends on being connected.</p><span>Choropleth: Australian Digital
+                                        Inclusion Index score by state</span>
+</div>
+</div>
+<figcaption><p class="insight">Some of that comes down to where people live. The Digital Inclusion Index scores internet access, affordability and skills out of 100. The ACT scores 79.5 and Tasmania 69.4, ten points lower, with South Australia (71.3) the next lowest. <span class="cite">[<a href="#ref-6">6</a>]</span></p><span class="note">Note: State scores only. Scores also vary within each state, which this map cannot show.</span><span class="source">Source: Australian Digital Inclusion Index 2025; Australian Bureau
+                                    of Statistics boundaries. <span class="cite">[<a href="#ref-6">6</a>, <a href="#ref-5">5</a>]</span></span>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="heading-routing" class="chapter tone-debit" id="after-you-tap">
+<div class="wrap section-grid">
+<div class="section-intro">
+<p class="chapter-index">Layer 4 · The networks behind the tap</p>
+<h2 id="heading-routing">Behind<br/>the tap.</h2><p>Every tap goes somewhere. Which network carries it decides what the shop pays. <span class="cite">[<a href="#ref-2">2</a>, <a href="#ref-3">3</a>]</span></p>
+</div>
+<div class="section-visuals">
+<figure class="chart-card">
+<h3>Out of every 100 payments in 2022, 62 were a tap</h3>
+<p class="chart-deck">Payment instrument → how it was paid. Share of consumer payments by
+                                number, RBA survey 2022.</p>
+<div id="c8-sankey">
+<div class="chart-placeholder">
+<p>Your coffee money takes a route you never see.</p><span>Sankey: payment
+                                        instrument to payment channel, 100 payments in 2022</span>
+</div>
+</div>
+<figcaption><p class="insight">Out of every 100 payments in 2022, 42 were a card being tapped and another 20 were a phone or watch. Only 4 were still inserted or swiped. What customers don't see is the cost to the shop: in mid-2026 an eftpos debit payment cost about 0.43% of the sale, Visa and Mastercard debit about 0.6%, credit cards about 1%, and American Express 1.36%, more than three times as much as eftpos. <span class="cite">[<a href="#ref-2">2</a>, <a href="#ref-3">3</a>]</span></p><span class="note">Note: Bank transfers and BPAY are counted as online payments. Shares are rounded, so they may not add exactly to 100.</span><span class="source">Source: Reserve Bank of Australia,
+                                    Consumer Payments Survey 2022, and Retail Payments Statistics Table C3. <span class="cite">[<a href="#ref-2">2</a>, <a href="#ref-3">3</a>]</span></span>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="heading-habit" class="chapter tone-bnpl" id="heard-tried-stuck">
+<div class="wrap section-grid">
+<div class="section-intro">
+<p class="chapter-index">Layer 5 · Newer ways to pay</p>
+<h2 id="heading-habit">Heard of it.<br/>Tried it.<br/>Stuck with it?</h2><p>Hearing about a new way to pay isn't the same as using it. <span class="cite">[<a href="#ref-1">1</a>]</span></p>
+</div>
+<div class="section-visuals">
+<figure class="chart-card">
+<div id="c10-hype-vs-use">
+<div class="chart-placeholder">
+<p>A familiar name doesn't always make it to checkout.</p><span>Connected scatter:
+                                        awareness vs use, 2022 to 2025</span>
+</div>
+</div>
+<figcaption><p class="insight">If everyone who had heard of a method also used it, its dot would sit on the dashed line. Cryptocurrency is the furthest away: 66% of people have heard of it and fewer than 2% have paid with it, no different from 2022. PayID is the one that caught on, used by 32% of people in 2022 and 49% in 2025. <span class="cite">[<a href="#ref-1">1</a>]</span></p><span class="note">Note: PayTo was not asked about in 2022, so it only has a 2025 point.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments Survey
+                                    2022 and 2025. <span class="cite">[<a href="#ref-1">1</a>]</span></span>
+</figcaption>
+</figure>
+<figure class="chart-card">
+<div id="m5-online-spend-map">
+<div class="chart-placeholder">
+<p>Bills and holidays moved online. Petrol and groceries did not.</p><span>Bump
+                                        chart: sectors ranked by share of payments made online</span>
+</div>
+</div>
+<figcaption><p class="insight">Online payments grew most in things that were already partly online. Bills (82%) and holidays (81%) are now mostly paid online, holidays after dropping to 51% in 2022. Petrol is still only 1.5% and supermarkets 5%. <span class="cite">[<a href="#ref-1">1</a>]</span></p><span class="note">Note: Rank 1 is the sector with the highest online share that year. The numbers in the dots are the online shares (%).</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments Survey
+                                    2019–2025. <span class="cite">[<a href="#ref-1">1</a>]</span></span></figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="heading-access" class="chapter chapter-turn tone-cash" id="nearest-cash">
+<div class="wrap">
+<div class="wrap turn"><p class="turn-lead">Up to here, this has been about how Australians pay. From here it's about where they can still get cash, because those two stopped moving together. Cash use stopped falling in 2025 at about 15% of payments. The places to get it kept closing: between June 2017 and June 2025 Australia lost 44% of its bank branches and 63% of its bank-owned ATMs. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-4">4</a>]</span></p></div><div class="section-grid">
+<div class="section-intro">
+<p class="chapter-index">Layer 6 · Places to get cash</p>
+<h2 id="heading-access">How far to<br/>the nearest cash?</h2><p>Using less cash is a choice. Losing the branch down the road isn't. <span class="cite">[<a href="#ref-4">4</a>]</span></p>
+</div>
+<div class="section-visuals paired">
+<figure class="chart-card">
+<div id="c11-cartogram-cash-reliance">
+<div class="chart-placeholder">
+<p>Cash still matters. Not equally everywhere.</p><span>Tile cartogram: places
+                                            to get cash per 10,000 residents by state</span>
+</div>
+</div>
+<figcaption><p class="insight">The ACT has 8.9 places to get cash for every 10,000 people, but New South Wales has 2.8 and South Australia 2.6. The Northern Territory is second best at 6.7, so this isn't just remote places missing out; the big, crowded states are the thinnest. <span class="cite">[<a href="#ref-4">4</a>]</span></p><span class="note">Note: Rates use the 2025 populations APRA attaches to each area. Only banks and other deposit-taking institutions report to APRA, so independent ATMs (for example in pubs and shops) are not counted.</span><span class="source">Source: Australian Prudential
+                                        Regulation Authority, Points of Presence, June 2025. <span class="cite">[<a href="#ref-4">4</a>]</span></span></figcaption>
+</figure>
+<figure class="chart-card full-width">
+<div id="c12-proportional-symbol">
+<div class="chart-placeholder">
+<p>A shrinking network.</p><span>Proportional symbol map: bank branches by SA3,
+                                            coloured by change since 2017</span>
+</div>
+</div>
+<figcaption><p class="insight">Australia had 5,673 bank branches (matched to a region) in June 2017 and 3,191 in June 2025. The biggest cuts were in the city centres: Sydney's inner city went from 122 branches to 65, and Melbourne's from 99 to 41. Dragging a shorter period on the line chart shows the closures never stopped, with the biggest single-year drop between 2018 and 2019. <span class="cite">[<a href="#ref-4">4</a>]</span></p><span class="note">Note: Branches from every year (2017–2025) have been placed into today's (2021) ABS SA3 regions using the region names APRA records, and are drawn at each region's centre. Six offshore or unmatched regions (about 7 branches) are left out.</span><span class="source">Source: Australian Prudential Regulation Authority,
+                                        Points of Presence 2017–2025; Australian Bureau of Statistics boundaries. <span class="cite">[<a href="#ref-4">4</a>, <a href="#ref-5">5</a>]</span></span>
+</figcaption>
+</figure>
+<figure class="chart-card full-width">
+<h3>In Melbourne the next branch is a short walk away. In the far east and north-west it can be over 100 km.</h3>
+<p class="chart-deck">Each cell is the area closer to that bank branch than to any
+                                    other, June 2025. Big cells mean a long drive. 90% of Melbourne-area branches have another within 2 km.
+                                </p>
+<div class="zoom-layout">
+<div id="c13-voronoi">
+<div class="chart-placeholder">
+<p>The long way to your own money.</p><span>Voronoi map: catchment of every
+                                                bank branch in Victoria</span>
+</div>
+</div>
+<aside aria-label="Map zoom" class="zoom-panel">
+<div id="c13-zoom"></div>
+</aside>
+</div>
+<figcaption><p class="insight">Each cell is the area where that branch is the nearest one. Around Melbourne they're tiny: 90% of branches in the city have another within 2 km. Out on the edges they're huge. The next branch from Mallacoota is 116 km away in a straight line, and from Ouyen 68 km. <span class="cite">[<a href="#ref-4">4</a>, <a href="#ref-5">5</a>]</span></p><span class="source">Source: Australian Prudential Regulation Authority, Points of
+                                        Presence, June 2025; Australian Bureau of Statistics boundaries. <span class="cite">[<a href="#ref-4">4</a>, <a href="#ref-5">5</a>]</span></span>
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section aria-labelledby="heading-backup" class="chapter tone-cash" id="cash-in-the-kit">
+<div class="wrap section-grid">
+<div class="section-intro">
+<p class="chapter-index">Why cash stays</p>
+<h2 id="heading-backup">Keep cash<br/>in the kit.</h2><p>Cash doesn't need a signal. When the network goes down it still works, and in 2026 the government made sure shops still have to take it. <span class="cite">[<a href="#ref-8">8</a>, <a href="#ref-9">9</a>]</span></p>
+</div>
+<div class="section-visuals">
+<figure class="chart-card full-width">
+<div id="c14-timeline">
+<div class="chart-placeholder">
+<p>Decades of innovation. A renewed place for cash.</p><span>Timeline: adoption,
+                                        infrastructure, cash and resilience milestones</span>
+</div>
+</div>
+<figcaption><p class="insight">ATM withdrawals peaked in 2008, the year after the first payments survey, at 863 million. They've fallen almost every year since, and the biggest single drop came in 2020, down 28% in one year. By 2025 there were 338 million, 61% below the peak. <span class="cite">[<a href="#ref-3">3</a>]</span></p><span class="note">Note: June 2025 only. Branches just over the NSW and SA borders are not included, so cells along the border look larger than they really are.</span><span class="note">Note: Bank-operated ATMs only, totalled from monthly figures. The 2026 law is shown at the 2025 level because the ATM series ends in 2025.</span><span class="source">Source: Reserve Bank of Australia, Retail Payments
+                                    Statistics Table C4 and Consumer Payments Survey; Australian Payments Plus;
+                                    Australian Treasury; Parliament of Australia. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-3">3</a>, <a href="#ref-7">7</a>, <a href="#ref-8">8</a>, <a href="#ref-9">9</a>]</span></span></figcaption>
+</figure>
+<figure class="chart-card full-width">
+<div id="m7-cartogram-disasters">
+<div class="chart-placeholder">
+<p>A digital system. A physical fallback: the post office.</p><span>Remoteness map:
+                                        Bank@Post share of face-to-face banking points</span>
+</div>
+</div>
+<figcaption><p class="insight">As branches closed, the post office filled the gap. By 2025 Australia had more Bank@Post outlets (3,365) than bank branches (3,205). In the major cities 41% of face-to-face banking points are post offices; in very remote areas it's 69%. <span class="cite">[<a href="#ref-4">4</a>]</span></p><span class="note">Note: Regions with no face-to-face banking are shown grey. Regions with only a few banking points can show very high or low shares. Boundaries are today's (2021) ABS SA3 regions.</span><span class="source">Source: Australian Prudential Regulation Authority, Points of
+                                    Presence, June 2025; Australian Bureau of Statistics boundaries. <span class="cite">[<a href="#ref-4">4</a>, <a href="#ref-5">5</a>]</span></span>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section aria-labelledby="heading-finale" class="chapter finale tone-wallet" id="last-five-per-cent">
+<div class="wrap section-grid">
+<div class="section-intro">
+<p class="chapter-index">Where the layers stop · Melbourne</p>
+<h2 id="heading-finale">The last<br/>five per cent.</h2><p>The national story repeats inside one city. <span class="cite">[<a href="#ref-4">4</a>]</span></p>
+</div>
+<div class="section-visuals">
+<figure class="chart-card">
+<div id="c15-melbourne-sa2">
+<div class="chart-placeholder">
+<p>The transition is not the same in every suburb.</p><span>SA2 choropleth: places
+                                        to get cash per 10,000 residents, Greater Melbourne</span>
+</div>
+</div>
+<figcaption><p class="insight">Greater Melbourne had 848 bank branches in 2017 and 430 in 2025, and 50 suburbs that had at least one branch in 2017 had none by 2025. What's left is mostly around the CBD and the big shopping centres. 59 of the 286 suburbs in the data have one place to get cash or none, so for someone without a car, getting cash can mean a trip to another suburb. <span class="cite">[<a href="#ref-4">4</a>]</span></p><span class="note">Note: Branch locations from 2017 and 2025 are both shown on today's (2021) ABS suburb (SA2) boundaries, and rates use 2025 populations. Only banks and other deposit-taking institutions report to APRA, so independent ATMs (for example in pubs and shops) are not counted.</span><span class="source">Source: Australian Prudential
+                                    Regulation Authority, Points of Presence 2017–2025; Australian Bureau of Statistics
+                                    boundaries. <span class="cite">[<a href="#ref-4">4</a>, <a href="#ref-5">5</a>]</span></span></figcaption>
+</figure>
+</div>
+</div>
+<div class="closing wrap"><h2>What the six layers add up to</h2><p>Seven surveys, 2007 to 2025. Cash fell from 69% of payments to 15%, replaced first by debit cards and then by tapping a card or phone, and that happened almost equally in the cities and the regions. Access to cash didn't fall equally. Australia closed 44% of its bank branches in eight years, the post office now provides most of the face-to-face banking outside the cities, and Greater Melbourne alone went from 848 branches to 430. The 2026 law says shops selling essentials have to take cash. Whether people can still get it is a different question, and the answer depends on where they live. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-2">2</a>, <a href="#ref-4">4</a>, <a href="#ref-8">8</a>]</span></p></div></section>
+</main>
+<footer class="sources wrap" id="sources">
+<div class="sources-heading">
+<h2>Sources and notes</h2>
+</div>
+<div class="sources-grid">
+<div id="survey-notes">
+<h3>About this page</h3>
+<p>Made for FIT3179 Data Visualisation 2 at Monash University, Semester 2 2026. It is written for
+                        Australian adults with no finance background, to show how quickly the country moved away from
+                        cash, who moved first, and where access to cash is thinning out. Every chart and map is
+                        Vega-Lite or Vega; the JSON for each is in the <code>specs/</code> folder of the
+                        repository.</p>
+<h3>What's plotted</h3>
+<p>The two opening charts use the RBA's published cash shares by number of payments, 2007–2025.
+                        Non-cash is calculated as 100 minus cash. The percentages are rounded survey estimates, not a
+                        count of all Australian transactions.</p>
+<p>Table 1 excludes payments over $9,999, automatic payments, transfers to family and friends, and
+                        transport cards. Online payments are included. Lines connect survey waves, not annual
+                        observations.</p>
+<p><a href="https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html">Scott
+                            Kim &amp; Michael Reschke, Consumer Payment Behaviour in Australia</a>. RBA Bulletin, 28 May
+                        2026, Table 1. <a href="https://www.rba.gov.au/publications/bulletin/2026/may/xlsx/bulletin-2026-05--03.xlsx">Underlying
+                            data workbook</a>.</p>
+<h3>What isn't observed</h3>
+<p>No public dataset gives payment mix below the capital-city/regional split, so every map of
+                        smaller areas shows access to cash (branches, Bank@Post outlets, ATMs and EFTPOS terminals from
+                        APRA) or the Australian Digital Inclusion Index, not how people in those places pay. Nothing on
+                        this page is modelled or imputed; every figure is a published or summed value from the sources
+                        listed.</p>
+<h3>How the data was prepared</h3>
+<p>RBA survey tables were used as published. APRA point records were summed by state, remoteness
+                        area, SA3 and SA2 and divided by the populations APRA attaches to each SA2. ABS boundaries were
+                        simplified in mapshaper to keep each map under 700 KB. The tidy CSV files the charts load are in the <code>data/</code> folder of the repository.</p>
+</div>
+<div>
+<h3>References</h3>
+<ol class="references">
+<li id="ref-1">Kim, S. &amp; Reschke, M. (2026). <em>Consumer Payment Behaviour in
+                                Australia</em>. Reserve Bank of Australia Bulletin, 28 May 2026. Data workbook used for
+                            the 2025 survey wave. <a href="https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html">https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html</a>
+</li>
+<li id="ref-2">Reserve Bank of Australia (2023). <em>Consumer Payments Survey</em>, data
+                            explorer export, survey waves 2007–2022. <a href="https://www.rba.gov.au/payments-and-infrastructure/consumer-payments-survey/">https://www.rba.gov.au/payments-and-infrastructure/consumer-payments-survey/</a>
+</li>
+<li id="ref-3">Reserve Bank of Australia (2026). <em>Retail Payments Statistics</em>, Table C3
+                            (average merchant fees) and Table C4 (ATM cash withdrawals). <a href="https://www.rba.gov.au/statistics/tables/">https://www.rba.gov.au/statistics/tables/</a>
+</li>
+<li id="ref-4">Australian Prudential Regulation Authority (2025). <em>Authorised Deposit-taking
+                                Institutions Points of Presence, June 2017 to June 2025</em>. <a href="https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence">https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence</a>
+</li>
+<li id="ref-5">Australian Bureau of Statistics (2021). <em>Australian Statistical Geography
+                                Standard (ASGS) Edition 3</em>, digital boundary files. <a href="https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026">https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026</a>
+</li>
+<li id="ref-6">ARC Centre of Excellence for Automated Decision-Making and Society, RMIT
+                            University, Swinburne University of Technology and Telstra (2025). <em>Australian Digital
+                                Inclusion Index 2025</em>, pp. 11–12. <a href="https://www.digitalinclusionindex.org.au/">https://www.digitalinclusionindex.org.au/</a>
+</li>
+<li id="ref-7">Australian Payments Plus (n.d.). eftpos and the New Payments Platform. Used for
+                            the dates of EFTPOS (1984) and the New Payments Platform launch (2018). <a href="https://www.auspayplus.com.au/">https://www.auspayplus.com.au/</a></li>
+<li id="ref-8">Australian Government, The Treasury (2026). Cash acceptance mandate for essential
+                            goods. <a href="https://treasury.gov.au/">https://treasury.gov.au/</a></li>
+<li id="ref-9">Parliament of Australia, Senate Environment and Communications References
+                            Committee (2023). Inquiry into the Optus network outage of 8 November 2023. <a href="https://www.aph.gov.au/">https://www.aph.gov.au/</a></li>
+</ol>
+</div>
+</div>
+<div class="footer-bottom"><span>Jake Axarlis / Monash University / FIT3179<br/><time datetime="2026-10-07">7
+                        October 2026</time></span><span>Built with Vega-Lite and Vega.<br/><strong>Use of generative
+                        AI.</strong> I acknowledge the use of Claude (Anthropic), through Claude Code (<a href="https://claude.com/claude-code">https://claude.com/claude-code</a>), between 4 and 7
+                    October 2026. I used it to summarise the assignment brief and the unit's design notes, download and
+                    aggregate the public datasets listed above, write the Vega-Lite and Vega specifications, build the
+                    HTML and CSS, and draft the chapter text, chart annotations and captions. This took about a dozen
+                    rounds of instructions and feedback. I set the story and design direction, checked the output
+                    against the brief and my Data Visualisation 1 feedback, and directed changes to the layout, colour,
+                    annotations and wording. All figures come from the sources listed; no data values were generated by
+                    AI.</span></div>
+</footer>
+<noscript>
+<p class="noscript-note wrap">JavaScript is off. The story text and sources are available, but the charts need JavaScript.</p>
+</noscript>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vega@5.33.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-lite@5.23.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.29.0"></script>
+<script type="text/javascript">
+    // One vegaEmbed call per chart, as in the FIT3179 Week 9 multi-chart example. SVG keeps the web fonts sharp.
+    vegaEmbed('#c1-line', 'specs/c1-line.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c2-waffle', 'specs/c2-waffle.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#m0-two-class-map', 'specs/m0-two-class-map.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c3-streamgraph', 'specs/c3-streamgraph.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#m1-eftpos-choropleth', 'specs/m1-eftpos-choropleth.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c5-ridgeline', 'specs/c5-ridgeline.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#m2-transit-dot-map', 'specs/m2-transit-dot-map.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c6-heatmap', 'specs/c6-heatmap.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c7-dumbbell', 'specs/c7-dumbbell.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#m3-cartogram-adii', 'specs/m3-cartogram-adii.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c8-sankey', 'specs/c8-sankey.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c10-hype-vs-use', 'specs/c10-hype-vs-use.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#m5-online-spend-map', 'specs/m5-online-spend-map.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c11-cartogram-cash-reliance', 'specs/c11-cartogram-cash-reliance.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c12-proportional-symbol', 'specs/c12-proportional-symbol.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c13-voronoi', 'specs/c13-voronoi.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c14-timeline', 'specs/c14-timeline.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#m7-cartogram-disasters', 'specs/m7-cartogram-disasters.json', { actions: false, renderer: 'svg' }).catch(console.error);
+    vegaEmbed('#c15-melbourne-sa2', 'specs/c15-melbourne-sa2.json', { actions: false, renderer: 'svg' }).catch(console.error);
+</script>
+</body>
+</html>

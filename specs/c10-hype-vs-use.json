@@ -1,0 +1,504 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Connected scatterplot of awareness versus use for five newer payment methods, 2022 to 2025. Two in three Australians have heard of cryptocurrency but under 2% have paid with it. PayID is the exception: awareness rose from 57% to 80% and use from 32% to 49%.",
+  "usermeta": {
+    "source": "Kim & Reschke, Consumer Payment Behaviour in Australia, RBA Bulletin, 28 May 2026, Graph 11",
+    "url": "https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html",
+    "method": "Share of respondents who were aware of each method (x) and who had used it (y). PayTo was not asked in 2022, so it has a single 2025 point. The dashed diagonal marks where everyone who had heard of a method had also used it."
+  },
+  "width": "container",
+  "height": 380,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": [
+      "Two in three have heard of crypto.",
+      "Almost nobody pays with it."
+    ],
+    "subtitle": [
+      "Share of people who have heard of and used each method. Hollow dot = 2022,",
+      "filled dot = 2025. Labels show (heard of, used) in 2025."
+    ]
+  },
+  "data": {
+    "url": "data/cps_alt_methods_awareness_use_2022_2025.csv"
+  },
+  "transform": [
+    {
+      "fold": [
+        "aware_2022",
+        "aware_2025"
+      ],
+      "as": [
+        "k",
+        "aware"
+      ]
+    },
+    {
+      "calculate": "datum.k === 'aware_2022' ? '2022' : '2025'",
+      "as": "year"
+    },
+    {
+      "calculate": "datum.year === '2022' ? datum.use_2022 : datum.use_2025",
+      "as": "use"
+    },
+    {
+      "filter": "isValid(datum.aware) && datum.aware !== '-' && datum.aware !== ''"
+    },
+    {
+      "calculate": "toNumber(datum.aware)",
+      "as": "aware"
+    },
+    {
+      "calculate": "toNumber(datum.use)",
+      "as": "use"
+    }
+  ],
+  "encoding": {
+    "x": {
+      "field": "aware",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          100
+        ]
+      },
+      "axis": {
+        "title": "Have heard of it (% of people)",
+        "values": [
+          0,
+          20,
+          40,
+          60,
+          80,
+          100
+        ],
+        "labelExpr": "datum.value + '%'",
+        "grid": false
+      }
+    },
+    "y": {
+      "field": "use",
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          0,
+          60
+        ]
+      },
+      "axis": {
+        "title": "Have used it (% of people)",
+        "values": [
+          0,
+          20,
+          40,
+          60
+        ],
+        "labelExpr": "datum.value + '%'"
+      }
+    },
+    "color": {
+      "field": "method",
+      "type": "nominal",
+      "scale": {
+        "domain": [
+          "PayID",
+          "Cryptocurrency",
+          "QR code",
+          "Alipay/WeChat Pay",
+          "PayTo"
+        ],
+        "range": [
+          "#0e9aa7",
+          "#d96a10",
+          "#d6409f",
+          "#d64545",
+          "#6d4bd6"
+        ]
+      },
+      "legend": {
+        "orient": "top",
+        "title": null,
+        "columns": 3
+      }
+    },
+    "detail": {
+      "field": "method"
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "values": [
+          {
+            "aware": 0,
+            "use": 0
+          },
+          {
+            "aware": 60,
+            "use": 60
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "line",
+        "strokeDash": [
+          4,
+          4
+        ],
+        "color": "#9aa6b8",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "color": {
+          "value": "#9aa6b8"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "aware": 57,
+            "use": 59
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "top",
+        "fontSize": 10,
+        "color": "#5f6b7d",
+        "font": "Space Grotesk, system-ui, sans-serif"
+      },
+      "encoding": {
+        "text": {
+          "value": "If everyone who had heard of it used it"
+        },
+        "color": {
+          "value": "#5f6b7d"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2,
+        "opacity": 0.7
+      },
+      "encoding": {
+        "order": {
+          "field": "year"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === '2022'"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": false,
+        "size": 70,
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "method",
+            "title": "Method"
+          },
+          {
+            "field": "year",
+            "title": "Survey"
+          },
+          {
+            "field": "aware",
+            "title": "Heard of it (%)",
+            "format": ".0f"
+          },
+          {
+            "field": "use",
+            "title": "Used it (%)",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === '2025'"
+        }
+      ],
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 150,
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5,
+        "opacity": 1
+      },
+      "encoding": {
+        "tooltip": [
+          {
+            "field": "method",
+            "title": "Method"
+          },
+          {
+            "field": "year",
+            "title": "Survey"
+          },
+          {
+            "field": "aware",
+            "title": "Heard of it (%)",
+            "format": ".0f"
+          },
+          {
+            "field": "use",
+            "title": "Used it (%)",
+            "format": ".0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === '2025'"
+        },
+        {
+          "calculate": "datum.method + ' (' + format(datum.aware, '.0f') + '%, ' + format(datum.use, '.0f') + '%)'",
+          "as": "lbl"
+        },
+        {
+          "calculate": "{'PayID': 'right', 'Cryptocurrency': 'left', 'QR code': 'left', 'Alipay/WeChat Pay': 'left', 'PayTo': 'left'}[datum.method]",
+          "as": "al"
+        },
+        {
+          "calculate": "{'PayID': -12, 'Cryptocurrency': 12, 'QR code': 12, 'Alipay/WeChat Pay': 12, 'PayTo': 12}[datum.method]",
+          "as": "ldx"
+        },
+        {
+          "calculate": "{'PayID': -16, 'Cryptocurrency': -2, 'QR code': -8, 'Alipay/WeChat Pay': 8, 'PayTo': -10}[datum.method]",
+          "as": "ldy"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "color": "#3b4656",
+        "baseline": "middle",
+        "align": {
+          "expr": "datum.al"
+        },
+        "dx": {
+          "expr": "datum.ldx"
+        },
+        "dy": {
+          "expr": "datum.ldy"
+        }
+      },
+      "encoding": {
+        "text": {
+          "field": "lbl"
+        },
+        "color": {
+          "value": "#3b4656"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "aware": 99,
+            "use": 30
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "fontSize": 10,
+        "color": "#0b7f8a",
+        "font": "Space Grotesk, system-ui, sans-serif"
+      },
+      "encoding": {
+        "text": {
+          "value": [
+            "PayID use rose 17 points since 2022,",
+            "the only method that caught on"
+          ]
+        },
+        "color": {
+          "value": "#0b7f8a"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

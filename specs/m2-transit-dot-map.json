@@ -1,0 +1,381 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "description": "Dumbbell chart of the card share of payments in ten spending sectors, 2022 versus 2025, sorted by the size of the change. Cards fell in seven sectors, most in services (62% to 51%) and transport (87% to 80%), and rose for holidays (78% to 83%) and bills (33% to 34%).",
+  "usermeta": {
+    "source": "Kim & Reschke, Consumer Payment Behaviour in Australia, RBA Bulletin, 28 May 2026, Graph 4",
+    "url": "https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html",
+    "method": "2022 values are the published 2025 share minus the published 2022–2025 change. Payments by number. Grey dot is 2022, coloured dot is 2025."
+  },
+  "width": "container",
+  "height": 330,
+  "autosize": {
+    "type": "fit",
+    "contains": "padding"
+  },
+  "title": {
+    "text": "Cards slipped in most sectors, 2022 to 2025",
+    "subtitle": [
+      "Card share of payments by sector. Grey 2022, coloured 2025;",
+      "number = change in points."
+    ]
+  },
+  "data": {
+    "url": "data/cps_card_share_by_sector_2022_2025.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "share_2022": "number",
+        "share_2025": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.share_2025 - datum.share_2022",
+      "as": "change"
+    },
+    {
+      "calculate": "datum.change >= 0 ? 'Rose' : 'Fell'",
+      "as": "direction"
+    },
+    {
+      "calculate": "datum.change >= 0 ? '2025 (rose)' : '2025 (fell)'",
+      "as": "key2025"
+    }
+  ],
+  "encoding": {
+    "y": {
+      "field": "Sector",
+      "type": "nominal",
+      "sort": {
+        "field": "change",
+        "order": "descending"
+      },
+      "axis": {
+        "title": "Spending sector",
+        "labelFontSize": 12,
+        "labelPadding": 10,
+        "grid": true,
+        "gridColor": "#cfd6e0",
+        "gridDash": [
+          2,
+          4
+        ]
+      }
+    },
+    "x": {
+      "type": "quantitative",
+      "scale": {
+        "domain": [
+          25,
+          95
+        ]
+      },
+      "axis": {
+        "title": "Card share of payments",
+        "labelExpr": "datum.value + '%'",
+        "values": [
+          30,
+          50,
+          70,
+          90
+        ],
+        "grid": false
+      }
+    }
+  },
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 3,
+        "color": "#9aa6b8"
+      },
+      "encoding": {
+        "x": {
+          "field": "share_2022"
+        },
+        "x2": {
+          "field": "share_2025"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 90
+      },
+      "encoding": {
+        "x": {
+          "field": "share_2022"
+        },
+        "color": {
+          "datum": "2022"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 120
+      },
+      "encoding": {
+        "x": {
+          "field": "share_2025"
+        },
+        "color": {
+          "field": "key2025",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "2022",
+              "2025 (fell)",
+              "2025 (rose)"
+            ],
+            "range": [
+              "#7d8898",
+              "#d64545",
+              "#1f6fd6"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "title": null
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Sector"
+          },
+          {
+            "field": "share_2022",
+            "title": "2022 (%)",
+            "format": ".0f"
+          },
+          {
+            "field": "share_2025",
+            "title": "2025 (%)",
+            "format": ".0f"
+          },
+          {
+            "field": "change",
+            "title": "Change (pts)",
+            "format": "+.1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "calculate": "abs(datum.change) < 0.5 ? '0' : format(datum.change, '+.0f')",
+          "as": "lbl"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "dx": 12,
+        "fontSize": 10,
+        "color": "#3b4656"
+      },
+      "encoding": {
+        "x": {
+          "aggregate": "max",
+          "field": "share_2025"
+        },
+        "text": {
+          "field": "lbl"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "x": 31,
+            "y": "Services",
+            "t": "Services: biggest fall, 62% → 51%"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "fontSize": 10,
+        "color": "#3b4656",
+        "font": "Space Grotesk, system-ui, sans-serif",
+        "dy": -16,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "x": {
+          "field": "x",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "y",
+          "type": "nominal"
+        },
+        "text": {
+          "field": "t"
+        }
+      }
+    }
+  ],
+  "config": {
+    "background": "transparent",
+    "padding": 0,
+    "font": "Space Grotesk, system-ui, sans-serif",
+    "view": {
+      "stroke": null,
+      "continuousWidth": 480,
+      "continuousHeight": 260
+    },
+    "title": {
+      "font": "Space Grotesk, system-ui, sans-serif",
+      "fontSize": 18,
+      "fontWeight": 500,
+      "color": "#141a24",
+      "anchor": "start",
+      "lineHeight": 23,
+      "offset": 16,
+      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFontSize": 13,
+      "subtitleColor": "#3b4656",
+      "subtitlePadding": 8,
+      "subtitleLineHeight": 17
+    },
+    "axis": {
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 10,
+      "labelColor": "#5f6b7d",
+      "labelPadding": 10,
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFontSize": 12,
+      "titleColor": "#3b4656",
+      "titlePadding": 12,
+      "domain": false,
+      "ticks": false,
+      "grid": false
+    },
+    "axisY": {
+      "grid": true,
+      "gridColor": "#cfd6e0",
+      "gridWidth": 1,
+      "gridDash": [
+        2,
+        4
+      ]
+    },
+    "axisX": {
+      "grid": false,
+      "labelAngle": 0
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "title": null,
+      "labelFont": "IBM Plex Mono, monospace",
+      "labelFontSize": 11,
+      "labelColor": "#3b4656",
+      "symbolType": "circle",
+      "symbolSize": 40,
+      "columnPadding": 20,
+      "rowPadding": 8,
+      "offset": 16
+    },
+    "header": {
+      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFontSize": 13,
+      "labelColor": "#141a24",
+      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleColor": "#3b4656"
+    },
+    "line": {
+      "strokeWidth": 2.5,
+      "strokeCap": "round",
+      "strokeJoin": "round"
+    },
+    "point": {
+      "size": 50,
+      "filled": true
+    },
+    "bar": {
+      "cornerRadiusEnd": 2
+    },
+    "area": {
+      "opacity": 0.9
+    },
+    "arc": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 2
+    },
+    "rule": {
+      "color": "#8a97ab",
+      "strokeWidth": 1
+    },
+    "geoshape": {
+      "stroke": "#f8fafc",
+      "strokeWidth": 0.5
+    },
+    "text": {
+      "font": "IBM Plex Mono, monospace",
+      "fontSize": 11,
+      "fontWeight": 400,
+      "color": "#3b4656"
+    },
+    "range": {
+      "category": [
+        "#d96a10",
+        "#1f6fd6",
+        "#1a9e5c",
+        "#6d4bd6",
+        "#d64545",
+        "#d6409f",
+        "#0e9aa7",
+        "#7d8898"
+      ],
+      "ordinal": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "ramp": [
+        "#fde8d2",
+        "#f9cfa3",
+        "#f3b26f",
+        "#ea9340",
+        "#d9741b",
+        "#b85c0f",
+        "#8f4508"
+      ],
+      "heatmap": [
+        "#ece6fb",
+        "#d6cbf6",
+        "#bca9ee",
+        "#9f86e3",
+        "#8366d6",
+        "#6a48c4",
+        "#512fa8"
+      ],
+      "diverging": [
+        "#c2410c",
+        "#e07a3a",
+        "#f0b48a",
+        "#f6dcc6",
+        "#e4e9f0",
+        "#bcd3f2",
+        "#7fa9e4",
+        "#3d7dd4",
+        "#1b55a8"
+      ]
+    }
+  }
+}

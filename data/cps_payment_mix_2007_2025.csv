@@ -1,0 +1,29 @@
+year,method,share
+2007,Cash,69.05
+2010,Cash,61.52
+2013,Cash,47.29
+2016,Cash,37.36
+2019,Cash,27.11
+2022,Cash,13.3
+2025,Cash,15.37
+2007,Debit card,14.77
+2010,Debit card,21.93
+2013,Debit card,23.85
+2016,Debit card,30.03
+2019,Debit card,44.29
+2022,Debit card,50.52
+2025,Debit card,49.42
+2007,Credit card,11.48
+2010,Credit card,9.01
+2013,Credit card,18.79
+2016,Credit card,21.69
+2019,Credit card,19.11
+2022,Credit card,25.64
+2025,Credit card,23.27
+2007,"Other (BPAY, bank transfer, cheque, other)",4.7
+2010,"Other (BPAY, bank transfer, cheque, other)",7.54
+2013,"Other (BPAY, bank transfer, cheque, other)",10.07
+2016,"Other (BPAY, bank transfer, cheque, other)",10.92
+2019,"Other (BPAY, bank transfer, cheque, other)",9.49
+2022,"Other (BPAY, bank transfer, cheque, other)",10.54
+2025,"Other (BPAY, bank transfer, cheque, other)",11.94
