@@ -14,10 +14,7 @@
   },
   "title": {
     "text": "Cards slipped in most sectors, 2022 to 2025",
-    "subtitle": [
-      "Card share of payments by sector. Grey 2022, coloured 2025;",
-      "number = change in points."
-    ]
+    "subtitle": "Card share of payments by sector. Grey 2022, blue 2025; number = change in points."
   },
   "data": {
     "url": "data/cps_card_share_by_sector_2022_2025.csv",
@@ -126,17 +123,14 @@
           "field": "share_2025"
         },
         "color": {
-          "field": "key2025",
-          "type": "nominal",
+          "datum": "2025",
           "scale": {
             "domain": [
               "2022",
-              "2025 (fell)",
-              "2025 (rose)"
+              "2025"
             ],
             "range": [
               "#7d8898",
-              "#d64545",
               "#1f6fd6"
             ]
           },

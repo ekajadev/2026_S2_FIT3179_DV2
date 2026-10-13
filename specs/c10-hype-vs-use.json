@@ -18,8 +18,8 @@
       "Almost nobody pays with it."
     ],
     "subtitle": [
-      "Share of people who have heard of and used each method. Hollow dot = 2022,",
-      "filled dot = 2025. Labels show (heard of, used) in 2025."
+      "Share of people who have heard of and used each method.",
+      "Hollow dot = 2022, filled dot = 2025. Labels show (heard of, used) in 2025."
     ]
   },
   "data": {
@@ -207,7 +207,7 @@
       "mark": {
         "type": "point",
         "filled": false,
-        "size": 70,
+        "size": 110,
         "strokeWidth": 2
       },
       "encoding": {
@@ -242,10 +242,9 @@
       "mark": {
         "type": "point",
         "filled": true,
-        "size": 150,
+        "size": 110,
         "stroke": "#ffffff",
-        "strokeWidth": 1.5,
-        "opacity": 1
+        "strokeWidth": 1.5
       },
       "encoding": {
         "tooltip": [
