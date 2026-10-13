@@ -149,3 +149,6 @@ thead th { color: var(--muted); }
 .vega-bind select { font: inherit; padding: 0.2rem 0.4rem; border: 1px solid var(--rule); border-radius: 4px; background: var(--surface); color: var(--ink); }
 .chart-card figcaption .insight { font-size: 0.9375rem; line-height: 1.6; color: var(--secondary); margin-bottom: 0.5rem; max-width: 46rem; }
 .turn .turn-lead { font-size: 1.125rem; line-height: 1.6; letter-spacing: 0; color: var(--secondary); max-width: 46rem; }
+/* A lone figure in a chapter: chart in the left column, its caption in the right (Week 9 two-column layout). */
+.chart-card.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--col-gap); align-items: center; }
+.chart-card.split figcaption { margin-top: 0; }

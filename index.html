@@ -51,10 +51,10 @@
 <div class="wrap section-grid">
 <div class="section-intro">
 <p class="chapter-index">Before the layers</p>
-<h2 id="heading-cash">When cash<br/>was king.</h2><p>Seven in every ten payments in 2007 were notes and coins. The survey only splits the country two ways, capital cities and everywhere else, and both started at about 69%. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-2">2</a>]</span></p>
+<h2 id="heading-cash">When cash<br/>was king.</h2><p>Seven in every ten payments in 2007 were notes and coins. The survey only splits the country two ways, capital cities and everywhere else, and both started at about 69%. The regions held on to cash a little longer: the gap was widest in 2016, at 34% of payments in the capitals against 44% everywhere else, and by 2022 it was under three points. Where people lived changed how fast they gave up cash, not whether they did. <span class="cite">[<a href="#ref-1">1</a>, <a href="#ref-2">2</a>]</span></p>
 </div>
 <div class="section-visuals">
-<figure class="chart-card">
+<figure class="chart-card full-width split">
 <div class="plot waffle-plot" id="c2-waffle">
 <div class="chart-placeholder">
 <p>69 cash payments became 15.</p><span>Out of every 100 payments: 69 cash / 31
@@ -63,17 +63,6 @@
 </div>
 <figcaption><p class="insight">Fifty-four of every hundred payments moved off cash in eighteen years. The 2025 grid is also the first time cash didn't fall: it went from 13% in 2022 to 15%. <span class="cite">[<a href="#ref-1">1</a>]</span></p><span class="note">Note: Rounded survey estimates. Each square is one percentage point of payments, not one person.</span><span class="source">Source: Reserve Bank of Australia, Consumer Payments
                                     Survey, 2007 and 2025 (Kim &amp; Reschke 2026, Table 1). <span class="cite">[<a href="#ref-1">1</a>]</span></span></figcaption>
-</figure>
-<figure class="chart-card">
-<div id="m0-two-class-map">
-<div class="chart-placeholder">
-<p>One country. Two speeds of change.</p><span>Two-class map: cash share of
-                                        payments, capital cities vs regional Australia</span>
-</div>
-</div>
-<figcaption><p class="insight">The regions held on to cash longer, but not for long. The gap opened to 9.2 points in 2016, 34% of payments in the capitals against 44% everywhere else, then closed to under three points by 2022. Where people lived changed how fast they gave up cash, not whether they did. <span class="cite">[<a href="#ref-2">2</a>]</span></p><span class="note">Note: Survey data from 2007–2022 has been placed onto today's (2021) ABS greater capital city boundaries. The survey only splits Australia into capital cities and the rest, so every regional area shows the same national figure.</span><span class="source">Source: Reserve Bank of
-                                    Australia, Consumer Payments Survey 2007–2022; Australian Bureau of Statistics
-                                    boundaries. <span class="cite">[<a href="#ref-2">2</a>, <a href="#ref-5">5</a>]</span></span></figcaption>
 </figure>
 </div>
 </div>
@@ -431,7 +420,6 @@
     // One vegaEmbed call per chart, as in the FIT3179 Week 9 multi-chart example. SVG keeps the web fonts sharp.
     vegaEmbed('#c1-line', 'specs/c1-line.json', { actions: false, renderer: 'svg' }).catch(console.error);
     vegaEmbed('#c2-waffle', 'specs/c2-waffle.json', { actions: false, renderer: 'svg' }).catch(console.error);
-    vegaEmbed('#m0-two-class-map', 'specs/m0-two-class-map.json', { actions: false, renderer: 'svg' }).catch(console.error);
     vegaEmbed('#c3-streamgraph', 'specs/c3-streamgraph.json', { actions: false, renderer: 'svg' }).catch(console.error);
     vegaEmbed('#m1-eftpos-choropleth', 'specs/m1-eftpos-choropleth.json', { actions: false, renderer: 'svg' }).catch(console.error);
     vegaEmbed('#c5-ridgeline', 'specs/c5-ridgeline.json', { actions: false, renderer: 'svg' }).catch(console.error);
