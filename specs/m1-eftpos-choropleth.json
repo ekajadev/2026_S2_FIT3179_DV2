@@ -5,19 +5,7 @@
     "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 1 (EFTPOS and ATM channels) and Table 2 (population by SA2); ABS ASGS Edition 3 STE 2021 boundaries",
     "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
     "method": "EFTPOS terminals are reported by APRA at state level only. Rate = terminals ÷ state population × 1,000. ATM change = (ATMs 2025 − ATMs 2017) ÷ ATMs 2017. Circle area is proportional to the percentage of ATMs lost.",
-    "projection": "Conic equal-area with standard parallels 18°S and 36°S.",
-    "zoom": {
-      "min": 1,
-      "max": 2.5,
-      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
-      "projectedBounds": [
-        -44.355,
-        94.135,
-        49.856,
-        184.144
-      ],
-      "reason": "8 states: little extra detail beyond 2.5×"
-    }
+    "projection": "Scale and translate fit the whole map to the chart using the d3-geo bounds of the boundary layer at scale 150: [-44.355, 94.135, 49.856, 184.144]"
   },
   "width": "container",
   "height": 420,
@@ -44,10 +32,10 @@
       0
     ],
     "scale": {
-      "expr": "150 * min(width / 94.211, height / 90.009) * mapZoom"
+      "expr": "150 * min(width / 94.211, height / 90.009)"
     },
     "translate": {
-      "expr": "[width / 2 - mapCentre[0] * min(width / 94.211, height / 90.009) * mapZoom, height / 2 - mapCentre[1] * min(width / 94.211, height / 90.009) * mapZoom]"
+      "expr": "[width / 2 - 2.751 * min(width / 94.211, height / 90.009), height / 2 - 139.139 * min(width / 94.211, height / 90.009)]"
     },
     "clipExtent": {
       "expr": "[[0, 0], [width, height]]"
@@ -366,74 +354,6 @@
         "text": {
           "field": "t"
         }
-      }
-    }
-  ],
-  "params": [
-    {
-      "name": "mapZoom",
-      "value": 1,
-      "bind": {
-        "input": "range",
-        "min": 1,
-        "max": 2.5,
-        "step": 0.1,
-        "name": "Zoom: "
-      }
-    },
-    {
-      "name": "mapCentre",
-      "value": [
-        2.751,
-        139.139
-      ],
-      "bind": {
-        "input": "select",
-        "options": [
-          [
-            2.751,
-            139.139
-          ],
-          [
-            41.371,
-            160.285
-          ],
-          [
-            26.924,
-            168.853
-          ],
-          [
-            48.03,
-            144.205
-          ],
-          [
-            -35.436,
-            154.346
-          ],
-          [
-            14.117,
-            160.321
-          ],
-          [
-            30.265,
-            182.346
-          ],
-          [
-            -3.019,
-            100.876
-          ]
-        ],
-        "labels": [
-          "Whole country",
-          "Sydney",
-          "Melbourne",
-          "Brisbane",
-          "Perth",
-          "Adelaide",
-          "Hobart",
-          "Darwin"
-        ],
-        "name": "Map centre: "
       }
     }
   ],

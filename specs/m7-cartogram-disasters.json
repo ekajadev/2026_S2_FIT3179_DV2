@@ -5,19 +5,7 @@
     "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2025, Table 1 aggregated by SA3 (branches, Bank@Post, other face-to-face); ABS ASGS Edition 3 SA3 2021 boundaries",
     "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
     "method": "Bank@Post share = Bank@Post outlets ÷ (branches + Bank@Post + other face-to-face points) in each SA3. Regions with no face-to-face points are shown in grey. By ABS remoteness class the share is 41% in major cities, 47% inner regional, 53% outer regional, 57% remote and 69% very remote. Boundaries simplified to 1.5% in mapshaper. The colour ramp spans 30–70% (clamped) because most regions fall between 38% and 59%; a 0–100% ramp hid those differences.",
-    "projection": "Conic equal-area with standard parallels 18°S and 36°S.",
-    "zoom": {
-      "min": 1,
-      "max": 8,
-      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
-      "projectedBounds": [
-        -44.356,
-        93.7,
-        49.855,
-        184.131
-      ],
-      "reason": "inner-city SA3 regions are a few kilometres across; 8× needed to see them"
-    }
+    "projection": "Scale and translate fit the whole map to the chart using the d3-geo bounds of the boundary layer at scale 150: [-44.356, 93.7, 49.855, 184.131]"
   },
   "width": "container",
   "height": 420,
@@ -41,10 +29,10 @@
       0
     ],
     "scale": {
-      "expr": "150 * min(width / 94.211, height / 90.431) * mapZoom"
+      "expr": "150 * min(width / 94.211, height / 90.431)"
     },
     "translate": {
-      "expr": "[width / 2 - mapCentre[0] * min(width / 94.211, height / 90.431) * mapZoom, height / 2 - mapCentre[1] * min(width / 94.211, height / 90.431) * mapZoom]"
+      "expr": "[width / 2 - 2.749 * min(width / 94.211, height / 90.431), height / 2 - 138.916 * min(width / 94.211, height / 90.431)]"
     },
     "clipExtent": {
       "expr": "[[0, 0], [width, height]]"
@@ -227,74 +215,6 @@
         "text": {
           "field": "t"
         }
-      }
-    }
-  ],
-  "params": [
-    {
-      "name": "mapZoom",
-      "value": 1,
-      "bind": {
-        "input": "range",
-        "min": 1,
-        "max": 8,
-        "step": 0.1,
-        "name": "Zoom: "
-      }
-    },
-    {
-      "name": "mapCentre",
-      "value": [
-        2.749,
-        138.916
-      ],
-      "bind": {
-        "input": "select",
-        "options": [
-          [
-            2.749,
-            138.916
-          ],
-          [
-            41.371,
-            160.285
-          ],
-          [
-            26.924,
-            168.853
-          ],
-          [
-            48.03,
-            144.205
-          ],
-          [
-            -35.436,
-            154.346
-          ],
-          [
-            14.117,
-            160.321
-          ],
-          [
-            30.265,
-            182.346
-          ],
-          [
-            -3.019,
-            100.876
-          ]
-        ],
-        "labels": [
-          "Whole country",
-          "Sydney",
-          "Melbourne",
-          "Brisbane",
-          "Perth",
-          "Adelaide",
-          "Hobart",
-          "Darwin"
-        ],
-        "name": "Map centre: "
       }
     }
   ],

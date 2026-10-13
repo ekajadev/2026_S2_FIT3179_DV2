@@ -5,19 +5,7 @@
     "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 2 (service points and population by SA2) and Table 1 (branch latitude and longitude); ABS ASGS Edition 3 SA2 2021 boundaries, Greater Melbourne only",
     "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
     "method": "Observed counts, not modelled. Cash points = branches + Bank@Post + ADI-operated ATMs ÷ APRA's SA2 population × 10,000. SA2s with no APRA record have zero points. Colour is capped at 12 per 10,000 so the CBD and airport (tiny resident populations) do not flatten the scale. Branch dots are APRA's reported coordinates, summed where several branches share a location. Boundaries simplified to 6% in mapshaper.",
-    "projection": "Conic equal-area fitted to Greater Melbourne.",
-    "zoom": {
-      "min": 1,
-      "max": 5,
-      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
-      "projectedBounds": [
-        -1.381,
-        155.854,
-        1.817,
-        159.315
-      ],
-      "reason": "already a city map; 5× reaches individual suburbs"
-    }
+    "projection": "Scale and translate fit the whole map to the chart using the d3-geo bounds of the boundary layer at scale 150: [-1.381, 155.854, 1.817, 159.315]"
   },
   "width": "container",
   "height": 440,
@@ -48,62 +36,6 @@
         ],
         "name": "Show branches in "
       }
-    },
-    {
-      "name": "mapZoom",
-      "value": 1,
-      "bind": {
-        "input": "range",
-        "min": 1,
-        "max": 5,
-        "step": 0.1,
-        "name": "Zoom: "
-      }
-    },
-    {
-      "name": "mapCentre",
-      "value": [
-        0.218,
-        157.584
-      ],
-      "bind": {
-        "input": "select",
-        "options": [
-          [
-            0.218,
-            157.584
-          ],
-          [
-            -0.077,
-            157.525
-          ],
-          [
-            0.444,
-            157.979
-          ],
-          [
-            -0.702,
-            157.752
-          ],
-          [
-            0.257,
-            158.39
-          ],
-          [
-            -0.124,
-            156.965
-          ]
-        ],
-        "labels": [
-          "Whole city",
-          "Melbourne CBD",
-          "Dandenong",
-          "Werribee",
-          "Frankston",
-          "Craigieburn"
-        ],
-        "name": "Map centre: "
-      }
     }
   ],
   "projection": {
@@ -118,10 +50,10 @@
       0
     ],
     "scale": {
-      "expr": "150 * min(width / 3.198, height / 3.461) * mapZoom"
+      "expr": "150 * min(width / 3.198, height / 3.461)"
     },
     "translate": {
-      "expr": "[width / 2 - mapCentre[0] * min(width / 3.198, height / 3.461) * mapZoom, height / 2 - mapCentre[1] * min(width / 3.198, height / 3.461) * mapZoom]"
+      "expr": "[width / 2 - 0.218 * min(width / 3.198, height / 3.461), height / 2 - 157.584 * min(width / 3.198, height / 3.461)]"
     },
     "clipExtent": {
       "expr": "[[0, 0], [width, height]]"

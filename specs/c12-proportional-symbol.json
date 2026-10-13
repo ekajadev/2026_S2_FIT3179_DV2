@@ -5,94 +5,12 @@
     "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 1 (Branch channel), aggregated to ABS SA3 2021 regions by year; ABS ASGS Edition 3 SA3 and STE 2021 boundaries",
     "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
     "method": "Branches summed by SA3 name and year and drawn at each SA3's interior centroid. Overview+detail follows the Week 10 studio: an interval brush on the line chart filters the map. For each region the first and last year inside the brush are found with argmin/argmax, giving branches at the end of the period and the change across it. With no brush the whole 2017–2025 period is used.",
-    "projection": "Conic equal-area with standard parallels 18°S and 36°S.",
-    "zoom": {
-      "min": 1,
-      "max": 6,
-      "note": "Zoom follows the Week 10 studio pattern exactly: a bound 'Zoom' slider and a 'Map centre' dropdown drive the projection's scale and translate through expressions. Pure Vega-Lite; nothing is added by JavaScript. projectedBounds are the d3-geo bounds at scale 150, used to fit the whole map at zoom 1; centre options are city coordinates projected the same way.",
-      "projectedBounds": [
-        -44.355,
-        94.135,
-        49.856,
-        184.144
-      ],
-      "reason": "east-coast circles overlap; 6× separates city regions",
-      "width": 1040,
-      "height": 430
-    }
+    "projection": "Scale and translate fit the whole map to the chart using the d3-geo bounds of the boundary layer at scale 150: [-44.355, 94.135, 49.856, 184.144]"
   },
   "title": {
     "text": "Australia closed 44% of its bank branches in eight years",
     "subtitle": "Drag across years on the line chart to compare any two Junes. Circle size = branches at the end of the period; colour = change over it."
   },
-  "params": [
-    {
-      "name": "mapZoom",
-      "value": 1,
-      "bind": {
-        "input": "range",
-        "min": 1,
-        "max": 6,
-        "step": 0.1,
-        "name": "Zoom: "
-      }
-    },
-    {
-      "name": "mapCentre",
-      "value": [
-        2.751,
-        139.139
-      ],
-      "bind": {
-        "input": "select",
-        "options": [
-          [
-            2.751,
-            139.139
-          ],
-          [
-            41.371,
-            160.285
-          ],
-          [
-            26.924,
-            168.853
-          ],
-          [
-            48.03,
-            144.205
-          ],
-          [
-            -35.436,
-            154.346
-          ],
-          [
-            14.117,
-            160.321
-          ],
-          [
-            30.265,
-            182.346
-          ],
-          [
-            -3.019,
-            100.876
-          ]
-        ],
-        "labels": [
-          "Whole country",
-          "Sydney",
-          "Melbourne",
-          "Brisbane",
-          "Perth",
-          "Adelaide",
-          "Hobart",
-          "Darwin"
-        ],
-        "name": "Map centre: "
-      }
-    }
-  ],
   "vconcat": [
     {
       "width": 1040,
@@ -109,10 +27,10 @@
           0
         ],
         "scale": {
-          "expr": "150 * min(1040 / 94.211, 430 / 90.009) * mapZoom"
+          "expr": "150 * min(1040 / 94.211, 430 / 90.009)"
         },
         "translate": {
-          "expr": "[1040 / 2 - mapCentre[0] * min(1040 / 94.211, 430 / 90.009) * mapZoom, 430 / 2 - mapCentre[1] * min(1040 / 94.211, 430 / 90.009) * mapZoom]"
+          "expr": "[1040 / 2 - 2.751 * min(1040 / 94.211, 430 / 90.009), 430 / 2 - 139.139 * min(1040 / 94.211, 430 / 90.009)]"
         },
         "clipExtent": [
           [
