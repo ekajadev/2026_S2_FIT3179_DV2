@@ -214,7 +214,7 @@
           "as": "atm_loss_pct"
         },
         {
-          "calculate": "datum.state + '  −' + format(datum.atm_loss_pct, '.0f') + '% ATMs'",
+          "calculate": "datum.state === 'ACT' ? 'ACT −73% (most)' : datum.state === 'NT' ? 'NT −48% (least)' : datum.state",
           "as": "lbl"
         }
       ],

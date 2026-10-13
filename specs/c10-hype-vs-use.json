@@ -18,8 +18,8 @@
       "Almost nobody pays with it."
     ],
     "subtitle": [
-      "Share of people who have heard of and used each method.",
-      "Hollow dot = 2022, filled dot = 2025. Labels show (heard of, used) in 2025."
+      "Share of people who have heard of and used each method. Hollow = 2022,",
+      "filled = 2025; grey = other methods. Labels show (heard of, used) in 2025."
     ]
   },
   "data": {
@@ -114,15 +114,18 @@
         "range": [
           "#0e9aa7",
           "#d96a10",
-          "#d6409f",
-          "#d64545",
-          "#6d4bd6"
+          "#9aa6b8",
+          "#9aa6b8",
+          "#9aa6b8"
         ]
       },
       "legend": {
         "orient": "top",
         "title": null,
-        "columns": 3
+        "values": [
+          "PayID",
+          "Cryptocurrency"
+        ]
       }
     },
     "detail": {

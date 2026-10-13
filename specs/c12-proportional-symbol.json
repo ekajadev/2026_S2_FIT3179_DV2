@@ -207,7 +207,7 @@
                 "tooltip": [
                   {
                     "field": "sa3",
-                    "title": "Region (SA3)"
+                    "title": "Region"
                   },
                   {
                     "field": "state",

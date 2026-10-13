@@ -153,62 +153,56 @@
             "state": "WA",
             "lon": 122,
             "lat": -26,
-            "lbl": "WA 73.9"
+            "lbl": "WA"
           },
           {
             "state": "NT",
             "lon": 133.5,
             "lat": -19.5,
-            "lbl": "NT 72.5"
+            "lbl": "NT"
           },
           {
             "state": "SA",
             "lon": 135.5,
             "lat": -30,
-            "lbl": "SA 71.3"
+            "lbl": "SA"
           },
           {
             "state": "QLD",
             "lon": 144.5,
             "lat": -22.5,
-            "lbl": "QLD 72.9"
+            "lbl": "QLD"
           },
           {
             "state": "NSW",
             "lon": 146.5,
             "lat": -32.3,
-            "lbl": "NSW 74.0"
+            "lbl": "NSW"
           },
           {
             "state": "VIC",
             "lon": 142.6,
             "lat": -37.2,
-            "lbl": "VIC 74.1"
+            "lbl": "VIC"
           },
           {
             "state": "TAS",
             "lon": 146.6,
             "lat": -42.1,
-            "lbl": "TAS 69.4"
+            "lbl": "TAS 69.4 (lowest)"
           },
           {
             "state": "ACTL",
             "lon": 151.9,
             "lat": -36.6,
-            "lbl": "ACT 79.5"
+            "lbl": "ACT 79.5 (highest)"
           }
         ]
       }
     },
     {
       "data": {
-        "values": [
-          {
-            "lon": 112,
-            "lat": -40,
-            "t": "ACT (79.5) sits 10 points above Tasmania (69.4)"
-          }
-        ]
+        "values": []
       },
       "mark": {
         "type": "text",

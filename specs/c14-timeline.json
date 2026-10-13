@@ -30,11 +30,6 @@
       },
       "mark": {
         "type": "area",
-        "color": "#f9cfa3",
-        "line": {
-          "color": "#d96a10",
-          "strokeWidth": 2
-        },
         "interpolate": "monotone"
       },
       "encoding": {
@@ -95,7 +90,86 @@
             "title": "ATM withdrawals (millions)",
             "format": ",.0f"
           }
-        ]
+        ],
+        "fill": {
+          "datum": "Bank ATM cash withdrawals per year",
+          "scale": {
+            "range": [
+              "#f9cfa3"
+            ]
+          },
+          "legend": {
+            "orient": "top",
+            "title": null,
+            "labelLimit": 300
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/rba_atm_withdrawals_1995_2025.csv",
+        "format": {
+          "type": "csv",
+          "parse": {
+            "year": "number",
+            "withdrawals_m": "number"
+          }
+        }
+      },
+      "mark": {
+        "type": "line",
+        "color": "#d96a10",
+        "strokeWidth": 2,
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              1994.5,
+              2036.5
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Year",
+            "values": [
+              1995,
+              2000,
+              2005,
+              2010,
+              2015,
+              2020,
+              2025
+            ],
+            "format": "d",
+            "grid": false
+          }
+        },
+        "y": {
+          "field": "withdrawals_m",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1180
+            ]
+          },
+          "axis": {
+            "title": "ATM withdrawals per year (millions)",
+            "values": [
+              0,
+              200,
+              400,
+              600,
+              800,
+              1000
+            ]
+          }
+        }
       }
     },
     {

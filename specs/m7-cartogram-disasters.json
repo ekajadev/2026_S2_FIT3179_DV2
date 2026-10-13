@@ -15,7 +15,7 @@
   },
   "title": {
     "text": "Further out, the post office is the bank",
-    "subtitle": "Bank@Post share of face-to-face banking points by SA3 region, June 2025"
+    "subtitle": "Bank@Post share of face-to-face banking points by council-sized region, June 2025"
   },
   "projection": {
     "type": "conicEqualArea",
@@ -126,7 +126,7 @@
         "tooltip": [
           {
             "field": "properties.SA3_NAME21",
-            "title": "Region (SA3)"
+            "title": "Region"
           },
           {
             "field": "state",

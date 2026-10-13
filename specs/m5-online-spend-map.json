@@ -14,7 +14,10 @@
   },
   "title": {
     "text": "Bills and holidays moved online. Petrol never did.",
-    "subtitle": "Sectors ranked by share of payments made online, 2019–2025"
+    "subtitle": [
+      "Sectors ranked by share of payments made online, 2019–2025.",
+      "Grey: the other five sectors."
+    ]
   },
   "data": {
     "url": "data/cps_online_share_by_sector_2019_2025.csv"
@@ -79,28 +82,33 @@
         "domain": [
           "Bills",
           "Holiday",
+          "Petrol",
           "Leisure",
           "Services",
           "Goods",
           "Food retail",
-          "Supermarket",
-          "Petrol"
+          "Supermarket"
         ],
         "range": [
-          "#0e9aa7",
-          "#d64545",
-          "#d6409f",
-          "#6d4bd6",
           "#1f6fd6",
-          "#1a9e5c",
+          "#d64545",
           "#d96a10",
-          "#7d8898"
+          "#b6bfcc",
+          "#b6bfcc",
+          "#b6bfcc",
+          "#b6bfcc",
+          "#b6bfcc"
         ]
       },
       "legend": {
         "orient": "top",
         "title": null,
-        "columns": 4
+        "values": [
+          "Bills",
+          "Holiday",
+          "Petrol"
+        ],
+        "labelExpr": "datum.label"
       }
     },
     "detail": {

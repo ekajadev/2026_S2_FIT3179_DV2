@@ -7,14 +7,14 @@
     "method": "Share of all payments by that age group made with a mobile device (debit and credit combined). Not published by age for 2025 on this basis; the companion chart uses the 2025 'any mobile device use' measure instead."
   },
   "width": "container",
-  "height": 250,
+  "height": 420,
   "autosize": {
     "type": "fit",
     "contains": "padding"
   },
   "title": {
     "text": "Phones replaced cards one generation at a time",
-    "subtitle": "Share of payments made by tapping a phone or watch, %",
+    "subtitle": "Share of each age group's payments made by tapping a phone or watch",
     "offset": 26
   },
   "data": {
@@ -76,9 +76,9 @@
             ]
           },
           "legend": {
-            "orient": "bottom",
-            "direction": "horizontal",
-            "gradientLength": 180,
+            "orient": "right",
+            "direction": "vertical",
+            "gradientLength": 160,
             "title": "% of payments",
             "labelExpr": "datum.value + '%'"
           }
@@ -100,16 +100,24 @@
       }
     },
     {
+      "transform": [
+        {
+          "filter": "datum.year == 2022 && (datum.age === '18-29' || datum.age === '65+')"
+        },
+        {
+          "calculate": "format(datum.tap_device_share, '.0f') + '%'",
+          "as": "lbl"
+        }
+      ],
       "mark": {
         "type": "text",
-        "fontSize": 13,
+        "fontSize": 14,
+        "fontWeight": 600,
         "font": "Space Grotesk, system-ui, sans-serif"
       },
       "encoding": {
         "text": {
-          "field": "tap_device_share",
-          "type": "quantitative",
-          "format": ".0f"
+          "field": "lbl"
         },
         "color": {
           "condition": {
