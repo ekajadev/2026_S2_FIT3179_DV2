@@ -144,8 +144,14 @@
           "legend": {
             "orient": "bottom",
             "direction": "horizontal",
-            "gradientLength": 180,
-            "title": "Cash points per 10,000 people"
+            "gradientLength": 200,
+            "title": "Cash points per 10,000 people",
+            "values": [
+              2,
+              4,
+              6,
+              8
+            ]
           }
         },
         "tooltip": [
@@ -189,7 +195,7 @@
     {
       "mark": {
         "type": "text",
-        "dy": -11,
+        "dy": 0,
         "fontSize": 15,
         "fontWeight": 500,
         "font": "Space Grotesk, system-ui, sans-serif"
@@ -205,26 +211,42 @@
           },
           "value": "#141a24"
         }
-      }
+      },
+      "transform": [
+        {
+          "filter": "datum.state !== 'ACT' && datum.state !== 'SA'"
+        }
+      ]
     },
     {
       "mark": {
         "type": "text",
-        "dy": 10,
-        "fontSize": 12
+        "dy": 0,
+        "fontSize": 13,
+        "fontWeight": 600,
+        "font": "Space Grotesk, system-ui, sans-serif"
       },
       "encoding": {
         "text": {
-          "field": "lbl"
+          "field": "note"
         },
         "color": {
           "condition": {
             "test": "datum.cash_points_per_10k > 5.5",
-            "value": "#fde8d2"
+            "value": "#ffffff"
           },
-          "value": "#3b4656"
+          "value": "#141a24"
         }
-      }
+      },
+      "transform": [
+        {
+          "filter": "datum.state === 'ACT' || datum.state === 'SA'"
+        },
+        {
+          "calculate": "datum.state + ' ' + format(datum.cash_points_per_10k, '.1f') + (datum.state === 'ACT' ? ' (most)' : ' (fewest)')",
+          "as": "note"
+        }
+      ]
     },
     {
       "data": {
