@@ -1,12 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Cash and non-cash shares of Australian consumer payments by number. Cash: 69% in 2007, 62% in 2010, 47% in 2013, 37% in 2016, 27% in 2019, 13% in 2022 and 15% in 2025. Non-cash is the complement. Cash stabilised between the last two survey waves.",
-  "usermeta": {
-    "source": "Scott Kim and Michael Reschke, Consumer Payment Behaviour in Australia, RBA Bulletin, 28 May 2026, Table 1",
-    "url": "https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html",
-    "method": "Published rounded cash shares. Non-cash = 100 minus cash. These are survey-wave observations, not annual data.",
-    "exclusions": "Payments over $9,999; automatic payments; transfers to family and friends; transport cards. Online payments included."
-  },
   "width": "container",
   "height": 300,
   "autosize": {
@@ -153,21 +147,41 @@
       "encoding": {
         "tooltip": [
           {
-            "field": "year",
-            "type": "ordinal",
-            "title": "Survey"
-          },
-          {
-            "field": "method",
-            "title": "Payment group"
-          },
-          {
             "field": "share",
             "type": "quantitative",
             "title": "Share (%)"
+          },
+          {
+            "field": "chg",
+            "type": "quantitative",
+            "title": "Change since last survey (pts)",
+            "format": "+.0f"
           }
         ]
-      }
+      },
+      "transform": [
+        {
+          "window": [
+            {
+              "op": "lag",
+              "field": "share",
+              "as": "prev"
+            }
+          ],
+          "groupby": [
+            "method"
+          ],
+          "sort": [
+            {
+              "field": "year"
+            }
+          ]
+        },
+        {
+          "calculate": "isValid(datum.prev) ? datum.share - datum.prev : null",
+          "as": "chg"
+        }
+      ]
     },
     {
       "transform": [
@@ -281,7 +295,7 @@
         "align": "left",
         "fontSize": 10,
         "color": "#3b4656",
-        "font": "Space Grotesk, system-ui, sans-serif"
+        "font": "IBM Plex Sans, system-ui, sans-serif"
       },
       "encoding": {
         "x": {
@@ -308,7 +322,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -322,7 +336,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -333,7 +347,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -368,10 +382,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -402,7 +416,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

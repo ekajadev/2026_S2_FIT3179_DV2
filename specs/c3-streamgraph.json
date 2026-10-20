@@ -1,20 +1,14 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Streamgraph of the share of consumer payments by number across seven survey waves, 2007 to 2025. Cash shrinks from 69% to 15%, debit cards grow from 15% to 49%, credit cards move between 9% and 26%, and other methods stay small.",
-  "usermeta": {
-    "source": "RBA Consumer Payments Survey Explorer export (2007–2022) and Kim & Reschke, RBA Bulletin May 2026, Graph 1 (2025)",
-    "url": "https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html",
-    "method": "Payments by number. 'Other' is 100 minus cash, debit and credit so that every wave sums to 100; for 2007–2022 it equals BPAY, internet/phone banking, cheque, gift cards and other. Lines connect survey waves, not annual observations.",
-    "labels": "End labels are placed at the midpoint of each band computed from the published shares (bands always sum to 100)."
-  },
   "width": "container",
-  "height": 300,
+  "height": 420,
   "autosize": {
     "type": "fit",
     "contains": "padding"
   },
   "title": {
-    "text": "Debit cards took the ground that cash gave up",
+    "text": "Debit cards replaced most of the cash",
     "subtitle": "Share of payments by number, seven Reserve Bank surveys 2007–2025"
   },
   "data": {
@@ -102,24 +96,7 @@
             "value": 1
           },
           "value": 0.35
-        },
-        "tooltip": [
-          {
-            "field": "year",
-            "type": "ordinal",
-            "title": "Survey"
-          },
-          {
-            "field": "method",
-            "title": "Method"
-          },
-          {
-            "field": "share",
-            "type": "quantitative",
-            "title": "Share of payments (%)",
-            "format": ".1f"
-          }
-        ]
+        }
       },
       "params": [
         {
@@ -174,7 +151,7 @@
         "y": 40,
         "fontSize": 10,
         "color": "#141a24",
-        "font": "Space Grotesk, system-ui, sans-serif"
+        "font": "IBM Plex Sans, system-ui, sans-serif"
       },
       "encoding": {
         "x": {
@@ -235,7 +212,7 @@
         "type": "text",
         "fontSize": 10,
         "color": "#141a24",
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "fontWeight": 500,
         "baseline": "middle",
         "align": {
@@ -264,7 +241,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -278,7 +255,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -289,7 +266,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -324,10 +301,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -358,7 +335,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

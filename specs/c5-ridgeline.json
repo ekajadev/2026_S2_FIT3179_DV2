@@ -1,11 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Six stacked bands, one per payment size, each showing the share of payments made in cash from 2007 to 2022 on its own 0–100% scale. Payments under $10 fell from 95% cash to 23%; $11–$20 from 77% to 15%; $21–$50 from 55% to 13%; $51–$100 from 36% to 8%; $101–$500 from 30% to 6%; over $500 from 19% to 3%.",
-  "usermeta": {
-    "source": "RBA Consumer Payments Survey Explorer export, Payment size dimension, payments by number, 2007–2022",
-    "url": "https://www.rba.gov.au/payments-and-infrastructure/consumer-payments-survey/",
-    "method": "Each band is one payment-size group with its own 0–100% vertical scale, so bands never overlap. Values at the right are the 2007 and 2022 cash shares. The 2025 wave is not published by payment size."
-  },
   "width": "container",
   "height": 440,
   "autosize": {
@@ -13,14 +8,8 @@
     "contains": "padding"
   },
   "title": {
-    "text": [
-      "Even the smallest purchase stopped",
-      "being a cash purchase"
-    ],
-    "subtitle": [
-      "Share of payments made in cash, by payment size, 2007–2022.",
-      "Each band runs from 0% (bottom) to 100% (top)."
-    ]
+    "text": "Even small purchases moved off cash",
+    "subtitle": "Share of payments made in cash, by payment size, 2007–2022. Each band runs from 0% (bottom) to 100% (top)."
   },
   "layer": [
     {
@@ -220,22 +209,7 @@
             "title": null,
             "labelLimit": 400
           }
-        },
-        "tooltip": [
-          {
-            "field": "size_band",
-            "title": "Payment size"
-          },
-          {
-            "field": "year",
-            "title": "Survey",
-            "format": "d"
-          },
-          {
-            "field": "cash_share",
-            "title": "Paid in cash (%)"
-          }
-        ]
+        }
       }
     },
     {
@@ -277,7 +251,7 @@
         "baseline": "middle",
         "fontSize": 11,
         "color": "#141a24",
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "dx": 8
       },
       "encoding": {
@@ -308,7 +282,7 @@
         "baseline": "middle",
         "fontSize": 10,
         "color": "#5f6b7d",
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "dx": 8
       },
       "encoding": {
@@ -339,7 +313,7 @@
         "baseline": "middle",
         "fontSize": 10,
         "color": "#3b4656",
-        "font": "Space Grotesk, system-ui, sans-serif"
+        "font": "IBM Plex Sans, system-ui, sans-serif"
       },
       "encoding": {
         "x": {
@@ -359,7 +333,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -373,7 +347,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -384,7 +358,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -419,10 +393,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -453,7 +427,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

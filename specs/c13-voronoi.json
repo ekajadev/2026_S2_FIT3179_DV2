@@ -1,12 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "Voronoi map of Victoria's 748 bank branch locations in June 2025. Each cell is the area closer to that branch than to any other, so cell size shows how far people must travel to their nearest branch: a few hundred metres in Melbourne, tens of kilometres in the Mallee and Gippsland. Cells are clipped to Victoria's outline and coloured by the ABS remoteness class of the branch.",
-  "usermeta": {
-    "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2025, Table 1 (Branch channel, Victoria, latitude and longitude); ABS ASGS Edition 3 STE 2021 boundary for Victoria",
-    "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
-    "method": "Branch points projected with a conic equal-area projection fitted to Victoria, then partitioned with Vega's voronoi transform. Cells outside Victoria are hidden by a mask polygon (a rectangle with the state cut out, made in mapshaper), so catchments stop at the border and coastline. Straight-line distance, not road distance. Built in Vega because Vega-Lite has no Voronoi transform.",
-    "interaction": "A three-step zoom (whole state, Melbourne and Geelong, Metropolitan Melbourne) refits the projection; the Voronoi cells are recomputed for each view so city catchments become visible."
-  },
   "autosize": "none",
   "height": 380,
   "padding": {
@@ -346,7 +340,7 @@
                 "signal": "zoomLevel === 0 ? 0.6 : 0.9"
               },
               "tooltip": {
-                "signal": "{'Nearest branch': datum.locality, 'Region (SA3)': datum.sa3, 'Branches here': datum.branches, 'Remoteness': datum.remoteness}"
+                "signal": "{'Nearest branch': datum.locality, 'Region (SA3)': datum.sa3, 'Branches here': datum.branches}"
               }
             },
             "hover": {
@@ -467,7 +461,7 @@
                 "signal": "datum.note ? '#8f4508' : '#141a24'"
               },
               "font": {
-                "value": "Space Grotesk, system-ui, sans-serif"
+                "value": "IBM Plex Sans, system-ui, sans-serif"
               },
               "fontWeight": {
                 "value": "bold"
@@ -489,7 +483,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -503,7 +497,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -514,7 +508,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -549,10 +543,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -583,7 +577,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

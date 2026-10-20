@@ -1,22 +1,14 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Dumbbell chart of the share of people who used a mobile device for card payments, by age, 2019 versus 2025. Under-30s rose from 18% to 69%; over-65s from 3% to 17%.",
-  "usermeta": {
-    "source": "Kim & Reschke, Consumer Payment Behaviour in Australia, RBA Bulletin, 28 May 2026, Graph 7",
-    "url": "https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html",
-    "method": "Share of respondents in each age group who made at least one card payment with a mobile device during the survey week."
-  },
   "width": "container",
-  "height": 250,
+  "height": 380,
   "autosize": {
     "type": "fit",
     "contains": "padding"
   },
   "title": {
-    "text": [
-      "Every age group took it up,",
-      "but the gap grew"
-    ],
+    "text": "Every age group took it up, but the gap grew",
     "subtitle": "Share of people who paid with a phone or watch, 2019 → 2025"
   },
   "data": {
@@ -100,21 +92,8 @@
         },
         "tooltip": [
           {
-            "field": "Age"
-          },
-          {
-            "field": "2019",
-            "title": "2019 (%)",
-            "format": ".0f"
-          },
-          {
             "field": "2022",
-            "title": "2022 (%)",
-            "format": ".0f"
-          },
-          {
-            "field": "2025",
-            "title": "2025 (%)",
+            "title": "2022 survey (%)",
             "format": ".0f"
           }
         ],
@@ -126,8 +105,8 @@
               "2025"
             ],
             "range": [
-              "#7d8898",
-              "#6d4bd6"
+              "#9aa6b8",
+              "#141a24"
             ]
           },
           "legend": {
@@ -149,21 +128,8 @@
         },
         "tooltip": [
           {
-            "field": "Age"
-          },
-          {
-            "field": "2019",
-            "title": "2019 (%)",
-            "format": ".0f"
-          },
-          {
             "field": "2022",
-            "title": "2022 (%)",
-            "format": ".0f"
-          },
-          {
-            "field": "2025",
-            "title": "2025 (%)",
+            "title": "2022 survey (%)",
             "format": ".0f"
           }
         ],
@@ -223,7 +189,7 @@
         "align": "left",
         "fontSize": 10,
         "color": "#3b4656",
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "baseline": "middle"
       },
       "encoding": {
@@ -244,7 +210,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -258,7 +224,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -269,7 +235,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -304,10 +270,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -338,7 +304,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

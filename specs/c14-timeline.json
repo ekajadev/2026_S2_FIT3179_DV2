@@ -1,11 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Area chart of ATM cash withdrawals in Australia per year from 1995 to 2025, annotated with ten payment milestones. Withdrawals rose to a peak of 863 million in 2008, fell steadily as card and tap payments grew, dropped 28% in 2020 during the pandemic, and reached 338 million in 2025, 61% below the peak. Milestones include the first payments survey (2007), tapping overtaking cash (2019), the Optus outage (2023) and the 2026 cash acceptance law.",
-  "usermeta": {
-    "source": "RBA Retail Payments Statistics Table C4 (ATM withdrawals, annual sum of the monthly series); RBA Consumer Payments Survey 2007–2025; Australian Payments Plus; Australian Treasury; Senate inquiry into the 8 November 2023 Optus outage",
-    "url": "https://www.rba.gov.au/statistics/tables/",
-    "method": "Each milestone marker sits on the ATM curve at its year (the 2026 law is drawn level with the last observation, 2025, because the series ends there). Labels for 2018–2026 are stacked in a column to the right and joined to their markers by leader lines so they do not collide. EFTPOS (1984) predates the series and is noted in the subtitle."
-  },
   "width": "container",
   "height": 430,
   "autosize": {
@@ -14,7 +9,10 @@
   },
   "title": {
     "text": "ATM use peaked in 2008 and has fallen ever since",
-    "subtitle": "Bank ATM cash withdrawals per year, with the milestones that shaped them. EFTPOS card terminals arrived in 1984, before this series begins."
+    "subtitle": [
+      "Bank ATM cash withdrawals per year, with the milestones that shaped them.",
+      "EFTPOS card terminals arrived in 1984, before this series begins."
+    ]
   },
   "layer": [
     {
@@ -39,7 +37,7 @@
           "scale": {
             "domain": [
               1994.5,
-              2036.5
+              2043
             ],
             "nice": false
           },
@@ -79,18 +77,6 @@
             ]
           }
         },
-        "tooltip": [
-          {
-            "field": "year",
-            "title": "Year",
-            "format": "d"
-          },
-          {
-            "field": "withdrawals_m",
-            "title": "ATM withdrawals (millions)",
-            "format": ",.0f"
-          }
-        ],
         "fill": {
           "datum": "Bank ATM cash withdrawals per year",
           "scale": {
@@ -130,7 +116,7 @@
           "scale": {
             "domain": [
               1994.5,
-              2036.5
+              2043
             ],
             "nice": false
           },
@@ -278,10 +264,6 @@
             },
             "tooltip": [
               {
-                "field": "label",
-                "title": "Milestone"
-              },
-              {
                 "field": "detail",
                 "title": "What happened"
               },
@@ -295,8 +277,8 @@
         {
           "mark": {
             "type": "text",
-            "fontSize": 11,
-            "font": "Space Grotesk, system-ui, sans-serif",
+            "fontSize": 10,
+            "font": "IBM Plex Sans, system-ui, sans-serif",
             "color": "#3b4656",
             "baseline": "middle",
             "align": {
@@ -338,7 +320,7 @@
         "dx": -8,
         "dy": 22,
         "fontSize": 10,
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "color": "#8f4508"
       },
       "encoding": {
@@ -359,7 +341,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -373,7 +355,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -384,7 +366,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -419,10 +401,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -453,7 +435,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

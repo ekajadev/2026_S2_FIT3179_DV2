@@ -1,14 +1,8 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Choropleth of Australian states and territories coloured by the 2025 Australian Digital Inclusion Index score. The ACT scores highest at 79.5 and Tasmania lowest at 69.4; the national score is 73.6.",
-  "usermeta": {
-    "source": "Australian Digital Inclusion Index 2025 report (Thomas et al., ARC Centre of Excellence for Automated Decision-Making and Society, RMIT, Swinburne and Telstra), pp. 11–12; ABS ASGS Edition 3 STE 2021 boundaries",
-    "url": "https://www.digitalinclusionindex.org.au/",
-    "method": "Published state and territory index scores, 0–100 scale. Access sub-scores shown where the report publishes them. Boundaries simplified to 4% in mapshaper.",
-    "projection": "Scale and translate fit the whole map to the chart using the d3-geo bounds of the boundary layer at scale 150: [-44.355, 94.135, 49.856, 184.144]"
-  },
   "width": "container",
-  "height": 360,
+  "height": 420,
   "autosize": {
     "type": "fit",
     "contains": "padding"
@@ -64,6 +58,10 @@
     {
       "calculate": "datum.adii_2025 - datum.national_adii",
       "as": "gap"
+    },
+    {
+      "calculate": "datum.gap <= -2 ? 'More than 2 below' : datum.gap < 0 ? 'Up to 2 below' : datum.gap < 2 ? 'Up to 2 above' : 'More than 2 above'",
+      "as": "band"
     }
   ],
   "layer": [
@@ -76,39 +74,32 @@
       },
       "encoding": {
         "color": {
-          "field": "adii_2025",
-          "type": "quantitative",
+          "field": "band",
+          "type": "ordinal",
           "scale": {
             "domain": [
-              68,
-              80
+              "More than 2 below",
+              "Up to 2 below",
+              "Up to 2 above",
+              "More than 2 above"
             ],
             "range": [
-              "#ece6fb",
-              "#d6cbf6",
-              "#bca9ee",
-              "#9f86e3",
-              "#8366d6",
-              "#6a48c4",
-              "#512fa8"
+              "#c4e8eb",
+              "#7fcbd2",
+              "#2b9ea9",
+              "#0b6470"
             ]
           },
           "legend": {
-            "orient": "bottom-left",
+            "orient": "top",
             "direction": "horizontal",
-            "gradientLength": 160,
-            "title": "Index score"
+            "title": "Score vs national (73.6)",
+            "symbolType": "square",
+            "symbolSize": 120,
+            "columns": 2
           }
         },
         "tooltip": [
-          {
-            "field": "properties.STE_NAME21",
-            "title": "State or territory"
-          },
-          {
-            "field": "adii_2025",
-            "title": "Digital inclusion score"
-          },
           {
             "field": "gap",
             "title": "Versus national",
@@ -129,10 +120,14 @@
       ],
       "mark": {
         "type": "text",
-        "fontSize": 11,
+        "fontSize": 10,
         "color": "#141a24",
-        "font": "Space Grotesk, system-ui, sans-serif",
-        "clip": true
+        "font": "IBM Plex Sans, system-ui, sans-serif",
+        "clip": true,
+        "lineHeight": 12,
+        "align": {
+          "expr": "datum.state === 'ACTL' ? 'left' : 'center'"
+        }
       },
       "encoding": {
         "longitude": {
@@ -153,84 +148,79 @@
             "state": "WA",
             "lon": 122,
             "lat": -26,
-            "lbl": "WA"
+            "lbl": [
+              "Western Australia",
+              "73.9"
+            ]
           },
           {
             "state": "NT",
             "lon": 133.5,
             "lat": -19.5,
-            "lbl": "NT"
+            "lbl": [
+              "Northern Territory",
+              "72.5"
+            ]
           },
           {
             "state": "SA",
             "lon": 135.5,
             "lat": -30,
-            "lbl": "SA"
+            "lbl": [
+              "South Australia",
+              "71.3"
+            ]
           },
           {
             "state": "QLD",
             "lon": 144.5,
             "lat": -22.5,
-            "lbl": "QLD"
+            "lbl": [
+              "Queensland",
+              "72.9"
+            ]
           },
           {
             "state": "NSW",
             "lon": 146.5,
             "lat": -32.3,
-            "lbl": "NSW"
+            "lbl": [
+              "New South Wales",
+              "74.0"
+            ]
           },
           {
             "state": "VIC",
             "lon": 142.6,
-            "lat": -37.2,
-            "lbl": "VIC"
+            "lat": -36.9,
+            "lbl": [
+              "Victoria",
+              "74.1"
+            ]
           },
           {
             "state": "TAS",
             "lon": 146.6,
             "lat": -42.1,
-            "lbl": "TAS 69.4 (lowest)"
+            "lbl": "Tasmania 69.4 (lowest)"
           },
           {
             "state": "ACTL",
-            "lon": 151.9,
-            "lat": -36.6,
-            "lbl": "ACT 79.5 (highest)"
+            "lon": 150.4,
+            "lat": -36.2,
+            "lbl": [
+              "Australian Capital",
+              "Territory 79.5 (highest)"
+            ]
           }
         ]
-      }
-    },
-    {
-      "data": {
-        "values": []
-      },
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "fontSize": 10,
-        "color": "#3b4656",
-        "font": "Space Grotesk, system-ui, sans-serif",
-        "clip": true
-      },
-      "encoding": {
-        "longitude": {
-          "field": "lon",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "lat",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "t"
-        }
       }
     }
   ],
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -244,7 +234,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -255,7 +245,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -290,10 +280,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -324,7 +314,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

@@ -1,20 +1,15 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Dumbbell chart of the card share of payments in ten spending sectors, 2022 versus 2025, sorted by the size of the change. Cards fell in seven sectors, most in services (62% to 51%) and transport (87% to 80%), and rose for holidays (78% to 83%) and bills (33% to 34%).",
-  "usermeta": {
-    "source": "Kim & Reschke, Consumer Payment Behaviour in Australia, RBA Bulletin, 28 May 2026, Graph 4",
-    "url": "https://www.rba.gov.au/publications/bulletin/2026/may/consumer-payment-behaviour-in-australia.html",
-    "method": "2022 values are the published 2025 share minus the published 2022–2025 change. Payments by number. Grey dot is 2022, coloured dot is 2025."
-  },
   "width": "container",
-  "height": 330,
+  "height": 440,
   "autosize": {
     "type": "fit",
     "contains": "padding"
   },
   "title": {
     "text": "Cards slipped in most sectors, 2022 to 2025",
-    "subtitle": "Card share of payments by sector. Grey 2022, blue 2025; number = change in points."
+    "subtitle": "Card share of payments by sector. Grey is 2022, blue is 2025, and the number is the change in points."
   },
   "data": {
     "url": "data/cps_card_share_by_sector_2022_2025.csv",
@@ -141,9 +136,6 @@
         },
         "tooltip": [
           {
-            "field": "Sector"
-          },
-          {
             "field": "share_2022",
             "title": "2022 (%)",
             "format": ".0f"
@@ -152,11 +144,6 @@
             "field": "share_2025",
             "title": "2025 (%)",
             "format": ".0f"
-          },
-          {
-            "field": "change",
-            "title": "Change (pts)",
-            "format": "+.1f"
           }
         ]
       }
@@ -200,7 +187,7 @@
         "align": "left",
         "fontSize": 10,
         "color": "#3b4656",
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "dy": -16,
         "baseline": "middle"
       },
@@ -222,7 +209,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -236,7 +223,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -247,7 +234,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -282,10 +269,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -316,7 +303,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

@@ -1,23 +1,20 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Choropleth of Greater Melbourne's SA2 neighbourhoods coloured by places to get cash (bank branches, Bank@Post outlets and bank ATMs) per 10,000 residents in June 2025, with the location of every bank branch overlaid as a dot for either June 2017 or June 2025, chosen with a toggle. Melbourne had 848 branches in 2017 and 430 in 2025. Many growth-area and middle-ring suburbs have no cash point at all, while shopping-centre suburbs have ten or more per 10,000.",
-  "usermeta": {
-    "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 2 (service points and population by SA2) and Table 1 (branch latitude and longitude); ABS ASGS Edition 3 SA2 2021 boundaries, Greater Melbourne only",
-    "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
-    "method": "Observed counts, not modelled. Cash points = branches + Bank@Post + ADI-operated ATMs ÷ APRA's SA2 population × 10,000. SA2s with no APRA record have zero points. Colour is capped at 12 per 10,000 so the CBD and airport (tiny resident populations) do not flatten the scale. Branch dots are APRA's reported coordinates, summed where several branches share a location. Boundaries simplified to 6% in mapshaper.",
-    "projection": "Scale and translate fit the whole map to the chart using the d3-geo bounds of the boundary layer at scale 150: [-1.381, 155.854, 1.817, 159.315]"
-  },
   "width": "container",
-  "height": 440,
+  "height": 520,
   "autosize": {
     "type": "fit",
     "contains": "padding"
   },
   "title": {
-    "text": "Melbourne lost half its bank branches. Where cash is now depends on the suburb.",
+    "text": [
+      "Melbourne lost half its bank branches.",
+      "Where cash is now depends on the suburb."
+    ],
     "subtitle": [
-      "Fill: branches, Bank@Post and bank ATMs per 10,000 residents by suburb, June 2025, capped at 12. Dots: bank branches in the",
-      "chosen year."
+      "Fill: branches, Bank@Post and bank ATMs per 10,000 residents by suburb, June 2025.",
+      "Dots: bank branches in the chosen year."
     ]
   },
   "params": [
@@ -107,32 +104,28 @@
           "field": "rate",
           "type": "quantitative",
           "scale": {
+            "type": "threshold",
             "domain": [
-              0,
-              12
+              1,
+              2,
+              4,
+              8
             ],
-            "clamp": true,
             "range": [
               "#fde8d2",
-              "#f9cfa3",
-              "#f3b26f",
+              "#f6c08a",
               "#ea9340",
-              "#d9741b",
-              "#b85c0f",
+              "#c4620f",
               "#8f4508"
             ]
           },
           "legend": {
-            "orient": "bottom-right",
+            "orient": "top",
             "direction": "horizontal",
-            "gradientLength": 150,
             "title": "Cash points per 10,000",
-            "values": [
-              0,
-              4,
-              8,
-              12
-            ]
+            "symbolType": "square",
+            "symbolSize": 120,
+            "gradientLength": 200
           }
         },
         "tooltip": [
@@ -221,7 +214,7 @@
             ]
           },
           "legend": {
-            "orient": "bottom-left",
+            "orient": "top",
             "title": "Bank branches at an address",
             "values": [
               1,
@@ -237,10 +230,6 @@
           {
             "field": "locality",
             "title": "Locality"
-          },
-          {
-            "field": "year",
-            "title": "Year"
           },
           {
             "field": "branches",
@@ -274,19 +263,23 @@
           ]
         },
         {
-          "calculate": "'Blue dots: bank branches, June ' + branchYear + ' (' + datum.total + ' in Greater Melbourne)'",
+          "calculate": "'Blue dots: ' + datum.total + ' branches, June ' + branchYear",
           "as": "lbl"
         }
       ],
       "mark": {
         "type": "text",
-        "align": "left",
-        "x": 0,
-        "y": 12,
-        "fontSize": 13,
+        "align": "right",
+        "x": {
+          "expr": "width"
+        },
+        "y": {
+          "expr": "height - 6"
+        },
+        "fontSize": 12,
         "fontWeight": 500,
         "color": "#1f6fd6",
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "clip": true
       },
       "encoding": {
@@ -330,7 +323,7 @@
         "dy": -10,
         "fontSize": 10,
         "color": "#141a24",
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "clip": true
       },
       "encoding": {
@@ -364,7 +357,7 @@
         "type": "text",
         "align": "left",
         "fontSize": 10.5,
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "color": "#8f4508",
         "fontWeight": 600
       },
@@ -386,7 +379,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -400,7 +393,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -411,7 +404,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -446,10 +439,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -480,7 +473,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

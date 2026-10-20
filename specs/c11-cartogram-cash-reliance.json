@@ -1,22 +1,14 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Tile cartogram of Australia's eight states and territories, each a same-sized square placed roughly in its geographic position, coloured by the number of places to get cash (bank branches, Bank@Post outlets and bank-operated ATMs) per 10,000 residents in June 2025. The ACT has 8.9 per 10,000 and South Australia 2.6.",
-  "usermeta": {
-    "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 2 (service points and population by SA2)",
-    "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
-    "method": "Branches + Bank@Post + ADI-operated ATMs at June 2025, divided by the ABS population attached to each SA2 in APRA's Table 2, summed to state. Branch change is June 2017 to June 2025. Equal tiles remove the area distortion of a geographic map so each state is compared on its rate alone."
-  },
   "width": "container",
-  "height": 330,
+  "height": 460,
   "autosize": {
     "type": "fit",
     "contains": "padding"
   },
   "title": {
-    "text": [
-      "Places to get cash are thinnest",
-      "in the most populous states"
-    ],
+    "text": "Places to get cash are thinnest in the most populous states",
     "subtitle": "Bank branches, Bank@Post and bank ATMs per 10,000 residents, June 2025"
   },
   "data": {
@@ -80,6 +72,14 @@
     {
       "calculate": "format(datum.cash_points_per_10k, '.1f')",
       "as": "lbl"
+    },
+    {
+      "calculate": "{\"WA\": \"Western Australia\", \"NT\": \"Northern Territory\", \"SA\": \"South Australia\", \"QLD\": \"Queensland\", \"NSW\": \"New South Wales\", \"VIC\": \"Victoria\", \"TAS\": \"Tasmania\", \"ACT\": \"Australian Capital Territory\"}[datum.state]",
+      "as": "name"
+    },
+    {
+      "calculate": "{\"WA\": \"Western|Australia\", \"NT\": \"Northern|Territory\", \"SA\": \"South|Australia\", \"QLD\": \"Queensland\", \"NSW\": \"New South|Wales\", \"VIC\": \"Victoria\", \"TAS\": \"Tasmania\", \"ACT\": \"Australian Capital|Territory\"}[datum.state]",
+      "as": "nameLines"
     }
   ],
   "encoding": {
@@ -127,42 +127,29 @@
           "field": "cash_points_per_10k",
           "type": "quantitative",
           "scale": {
+            "type": "threshold",
             "domain": [
-              2,
-              9
+              3,
+              5,
+              8
             ],
             "range": [
               "#fde8d2",
-              "#f9cfa3",
               "#f3b26f",
-              "#ea9340",
               "#d9741b",
-              "#b85c0f",
               "#8f4508"
             ]
           },
           "legend": {
             "orient": "bottom",
             "direction": "horizontal",
-            "gradientLength": 200,
             "title": "Cash points per 10,000 people",
-            "values": [
-              2,
-              4,
-              6,
-              8
-            ]
+            "symbolType": "square",
+            "symbolSize": 120,
+            "gradientLength": 200
           }
         },
         "tooltip": [
-          {
-            "field": "state",
-            "title": "State"
-          },
-          {
-            "field": "cash_points_per_10k",
-            "title": "Cash points per 10,000"
-          },
           {
             "field": "branches",
             "title": "Branches 2025"
@@ -195,18 +182,20 @@
     {
       "mark": {
         "type": "text",
-        "dy": 0,
-        "fontSize": 15,
+        "fontSize": 11.5,
         "fontWeight": 500,
-        "font": "Space Grotesk, system-ui, sans-serif"
+        "lineHeight": 14,
+        "font": "IBM Plex Sans, system-ui, sans-serif",
+        "baseline": "middle",
+        "dy": -8
       },
       "encoding": {
         "text": {
-          "field": "state"
+          "field": "tileLabel"
         },
         "color": {
           "condition": {
-            "test": "datum.cash_points_per_10k > 5.5",
+            "test": "datum.cash_points_per_10k >= 8",
             "value": "#ffffff"
           },
           "value": "#141a24"
@@ -214,37 +203,8 @@
       },
       "transform": [
         {
-          "filter": "datum.state !== 'ACT' && datum.state !== 'SA'"
-        }
-      ]
-    },
-    {
-      "mark": {
-        "type": "text",
-        "dy": 0,
-        "fontSize": 13,
-        "fontWeight": 600,
-        "font": "Space Grotesk, system-ui, sans-serif"
-      },
-      "encoding": {
-        "text": {
-          "field": "note"
-        },
-        "color": {
-          "condition": {
-            "test": "datum.cash_points_per_10k > 5.5",
-            "value": "#ffffff"
-          },
-          "value": "#141a24"
-        }
-      },
-      "transform": [
-        {
-          "filter": "datum.state === 'ACT' || datum.state === 'SA'"
-        },
-        {
-          "calculate": "datum.state + ' ' + format(datum.cash_points_per_10k, '.1f') + (datum.state === 'ACT' ? ' (most)' : ' (fewest)')",
-          "as": "note"
+          "calculate": "split(datum.nameLines + '|' + format(datum.cash_points_per_10k, '.1f') + (datum.state === 'ACT' ? ' (most)' : datum.state === 'SA' ? ' (fewest)' : ''), '|')",
+          "as": "tileLabel"
         }
       ]
     },
@@ -255,8 +215,9 @@
             "col": 0,
             "row": 3,
             "t": [
-              "ACT: 3.4× the cash points",
-              "per person of SA"
+              "Australian Capital Territory:",
+              "3.4× the cash points",
+              "per person of South Australia"
             ]
           }
         ]
@@ -266,7 +227,7 @@
         "align": "center",
         "fontSize": 10,
         "color": "#3b4656",
-        "font": "Space Grotesk, system-ui, sans-serif",
+        "font": "IBM Plex Sans, system-ui, sans-serif",
         "dx": 0,
         "baseline": "middle"
       },
@@ -288,7 +249,7 @@
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -302,7 +263,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -313,7 +274,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -348,10 +309,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -382,7 +343,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"

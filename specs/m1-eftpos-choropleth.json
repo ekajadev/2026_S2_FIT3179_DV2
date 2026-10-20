@@ -1,12 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "description": "Map of Australian states with two variables: the fill shows bank-reported EFTPOS terminals per 1,000 residents in June 2025 (ACT 49, Queensland 23, South Australia 13), and a circle on each state shows the share of bank ATMs removed between 2017 and 2025 (ACT lost 73%, Northern Territory 48%). The card infrastructure stayed; the cash infrastructure went.",
-  "usermeta": {
-    "source": "APRA Authorised Deposit-taking Institutions Points of Presence, June 2017 to June 2025, Table 1 (EFTPOS and ATM channels) and Table 2 (population by SA2); ABS ASGS Edition 3 STE 2021 boundaries",
-    "url": "https://www.apra.gov.au/authorised-deposit-taking-institutions-points-of-presence",
-    "method": "EFTPOS terminals are reported by APRA at state level only. Rate = terminals ÷ state population × 1,000. ATM change = (ATMs 2025 − ATMs 2017) ÷ ATMs 2017. Circle area is proportional to the percentage of ATMs lost.",
-    "projection": "Scale and translate fit the whole map to the chart using the d3-geo bounds of the boundary layer at scale 150: [-44.355, 94.135, 49.856, 184.144]"
-  },
   "width": "container",
   "height": 420,
   "autosize": {
@@ -14,11 +8,11 @@
     "contains": "padding"
   },
   "title": {
-    "text": [
-      "The card terminals mostly stayed.",
-      "The cash machines went."
-    ],
-    "subtitle": "Fill: card terminals per 1,000 people. Circles: ATMs removed since 2017."
+    "text": "The card terminals mostly stayed. The cash machines went.",
+    "subtitle": [
+      "Fill: card terminals per 1,000 people. Circles: share of bank ATMs removed since 2017.",
+      "Circle size starts at 40% so the differences between states show."
+    ]
   },
   "projection": {
     "type": "conicEqualArea",
@@ -82,32 +76,31 @@
           "field": "eftpos_per_1k_2025",
           "type": "quantitative",
           "scale": {
+            "type": "threshold",
             "domain": [
-              10,
-              50
+              15,
+              20,
+              25,
+              35
             ],
             "range": [
               "#ece6fb",
-              "#d6cbf6",
-              "#bca9ee",
+              "#c9b9f2",
               "#9f86e3",
-              "#8366d6",
-              "#6a48c4",
-              "#512fa8"
+              "#7556d0",
+              "#4a2a9e"
             ]
           },
           "legend": {
             "orient": "top",
             "direction": "horizontal",
-            "gradientLength": 150,
-            "title": "Card terminals per 1,000"
+            "title": "Card terminals per 1,000",
+            "symbolType": "square",
+            "symbolSize": 120,
+            "gradientLength": 180
           }
         },
         "tooltip": [
-          {
-            "field": "properties.STE_NAME21",
-            "title": "State or territory"
-          },
           {
             "field": "eftpos_per_1k_2025",
             "title": "Terminals per 1,000 (2025)"
@@ -134,7 +127,7 @@
             "lat": -26,
             "al": "center",
             "ldx": 0,
-            "ldy": 24
+            "ldy": 30
           },
           {
             "state": "NT",
@@ -142,7 +135,7 @@
             "lat": -19.5,
             "al": "center",
             "ldx": 0,
-            "ldy": 24
+            "ldy": 30
           },
           {
             "state": "SA",
@@ -150,7 +143,7 @@
             "lat": -30,
             "al": "center",
             "ldx": 0,
-            "ldy": 24
+            "ldy": 30
           },
           {
             "state": "QLD",
@@ -158,23 +151,23 @@
             "lat": -22.5,
             "al": "center",
             "ldx": 0,
-            "ldy": 24
+            "ldy": 30
           },
           {
             "state": "NSW",
             "lon": 146,
             "lat": -31.2,
-            "al": "center",
-            "ldx": 0,
-            "ldy": 24
+            "al": "left",
+            "ldx": 20,
+            "ldy": -2
           },
           {
             "state": "VIC",
             "lon": 141.8,
             "lat": -37,
             "al": "right",
-            "ldx": -20,
-            "ldy": 0
+            "ldx": -18,
+            "ldy": 6
           },
           {
             "state": "TAS",
@@ -182,7 +175,7 @@
             "lat": -42.1,
             "al": "left",
             "ldx": 18,
-            "ldy": 0
+            "ldy": -6
           },
           {
             "state": "ACT",
@@ -214,7 +207,7 @@
           "as": "atm_loss_pct"
         },
         {
-          "calculate": "datum.state === 'ACT' ? 'ACT −73% (most)' : datum.state === 'NT' ? 'NT −48% (least)' : datum.state",
+          "calculate": "datum.state === 'ACT' ? ['Australian Capital', 'Territory', format(datum.atm_change_pct, '.0f') + '% ATMs (most)'] : [{'WA': 'Western Australia','NT': 'Northern Territory','SA': 'South Australia','QLD': 'Queensland','NSW': 'New South Wales','VIC': 'Victoria','TAS': 'Tasmania','ACT': 'Australian Capital Territory'}[datum.state], format(datum.atm_change_pct, '.0f') + '% ATMs' + (datum.state === 'ACT' ? ' (most)' : datum.state === 'NT' ? ' (least)' : '')]",
           "as": "lbl"
         }
       ],
@@ -242,21 +235,22 @@
               "type": "quantitative",
               "scale": {
                 "domain": [
-                  0,
+                  40,
                   80
                 ],
                 "range": [
-                  0,
-                  650
-                ]
+                  40,
+                  1100
+                ],
+                "zero": false
               },
               "legend": {
                 "orient": "top",
                 "title": "ATMs removed since 2017",
                 "values": [
-                  25,
                   50,
-                  75
+                  60,
+                  70
                 ],
                 "labelExpr": "datum.value + '%'",
                 "symbolFillColor": "#d64545",
@@ -267,10 +261,6 @@
             },
             "tooltip": [
               {
-                "field": "state",
-                "title": "State"
-              },
-              {
                 "field": "atms_2017",
                 "title": "Bank ATMs 2017",
                 "format": ","
@@ -279,11 +269,6 @@
                 "field": "atms",
                 "title": "Bank ATMs 2025",
                 "format": ","
-              },
-              {
-                "field": "atm_change_pct",
-                "title": "Change (%)",
-                "format": "+.0f"
               }
             ]
           }
@@ -296,7 +281,7 @@
             },
             "fontSize": 10,
             "color": "#141a24",
-            "font": "Space Grotesk, system-ui, sans-serif",
+            "font": "IBM Plex Sans, system-ui, sans-serif",
             "align": {
               "expr": "datum.al"
             },
@@ -304,7 +289,8 @@
               "expr": "datum.ldx"
             },
             "baseline": "middle",
-            "clip": true
+            "clip": true,
+            "lineHeight": 12
           },
           "encoding": {
             "longitude": {
@@ -321,46 +307,12 @@
           }
         }
       ]
-    },
-    {
-      "data": {
-        "values": [
-          {
-            "lon": 112.5,
-            "lat": -38.5,
-            "t": [
-              "Terminals fell 10–19% in every state;",
-              "bank ATMs fell 48–73%"
-            ]
-          }
-        ]
-      },
-      "mark": {
-        "type": "text",
-        "align": "left",
-        "fontSize": 10.5,
-        "font": "Space Grotesk, system-ui, sans-serif",
-        "color": "#3b4656"
-      },
-      "encoding": {
-        "longitude": {
-          "field": "lon",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "lat",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "t"
-        }
-      }
     }
   ],
   "config": {
     "background": "transparent",
     "padding": 0,
-    "font": "Space Grotesk, system-ui, sans-serif",
+    "font": "IBM Plex Sans, system-ui, sans-serif",
     "view": {
       "stroke": null,
       "continuousWidth": 480,
@@ -374,7 +326,7 @@
       "anchor": "start",
       "lineHeight": 23,
       "offset": 16,
-      "subtitleFont": "Space Grotesk, system-ui, sans-serif",
+      "subtitleFont": "IBM Plex Sans, system-ui, sans-serif",
       "subtitleFontSize": 13,
       "subtitleColor": "#3b4656",
       "subtitlePadding": 8,
@@ -385,7 +337,7 @@
       "labelFontSize": 10,
       "labelColor": "#5f6b7d",
       "labelPadding": 10,
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleFontSize": 12,
       "titleColor": "#3b4656",
       "titlePadding": 12,
@@ -420,10 +372,10 @@
       "offset": 16
     },
     "header": {
-      "labelFont": "Space Grotesk, system-ui, sans-serif",
+      "labelFont": "IBM Plex Sans, system-ui, sans-serif",
       "labelFontSize": 13,
       "labelColor": "#141a24",
-      "titleFont": "Space Grotesk, system-ui, sans-serif",
+      "titleFont": "IBM Plex Sans, system-ui, sans-serif",
       "titleColor": "#3b4656"
     },
     "line": {
@@ -454,7 +406,7 @@
       "strokeWidth": 0.5
     },
     "text": {
-      "font": "IBM Plex Mono, monospace",
+      "font": "IBM Plex Sans, system-ui, sans-serif",
       "fontSize": 11,
       "fontWeight": 400,
       "color": "#3b4656"
